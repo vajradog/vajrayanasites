@@ -101,7 +101,7 @@ const placeholderUrl = `${base}images/placeholder.svg`;
       
       <!-- Associated figures -->
       {associatedFigures.length > 0 && (
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-2 mb-4">
           {associatedFigures.slice(0, 3).map(figure => (
             <span class="text-xs text-sacred-500 bg-sacred-800/50 px-2 py-1 rounded">
               {figure}
@@ -109,19 +109,6 @@ const placeholderUrl = `${base}images/placeholder.svg`;
           ))}
         </div>
       )}
-      
-      <!-- Read more link -->
-      <div class="mt-4 flex items-center gap-2 text-gold-500 text-sm font-medium group/link">
-        <span class="transition-all duration-300 group-hover/link:mr-2">Explore site</span>
-        <svg 
-          class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-        </svg>
-      </div>
     </div>
   </a>
 </article>
