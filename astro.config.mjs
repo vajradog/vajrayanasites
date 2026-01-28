@@ -6,7 +6,7 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://vajradog.github.io',
-  base: '/vajrayana-pilgrimage/',
+  base: '/vajrayanasites/',
   integrations: [
     tailwind(),
     mdx(),
