@@ -7,6 +7,9 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  type?: 'website' | 'article';
+  publishedDate?: Date;
+  modifiedDate?: Date;
 }
 
 const base = import.meta.env.BASE_URL;
@@ -14,11 +17,47 @@ const base = import.meta.env.BASE_URL;
 const { 
   title, 
   description = 'A comprehensive guide to sacred Vajrayana Buddhist pilgrimage sites across the Himalayas',
-  image = `${base}og-image.jpg`
+  image = `${base}og-image.jpg`,
+  type = 'website',
+  publishedDate,
+  modifiedDate,
 } = Astro.props;
 
-const siteTitle = `${title} | Vajrayana Pilgrimage`;
+const siteName = 'Vajrayana Pilgrimage Sites';
+const siteTitle = title === 'Vajrayana Pilgrimage Sites' ? title : `${title} | Vajrayana Pilgrimage`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = image.startsWith('http') ? image : new URL(image, Astro.site).href;
+
+// JSON-LD Structured Data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': type === 'article' ? 'Article' : 'WebSite',
+  name: siteTitle,
+  description,
+  url: canonicalURL.href,
+  ...(type === 'article' && {
+    headline: title,
+    image: ogImageURL,
+    datePublished: publishedDate?.toISOString(),
+    dateModified: modifiedDate?.toISOString() || publishedDate?.toISOString(),
+    author: {
+      '@type': 'Organization',
+      name: siteName,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: siteName,
+      url: Astro.site?.href,
+    },
+  }),
+  ...(type === 'website' && {
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${Astro.site?.href}sites?q={search_term_string}`,
+      'query-input': 'required name=search_term_string',
+    },
+  }),
+};
 ---
 
 <!DOCTYPE html>
@@ -32,22 +71,35 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <title>{siteTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Vajrayana Pilgrimage Sites" />
+    <meta name="keywords" content="Vajrayana, Buddhism, pilgrimage, Tibet, Nepal, Bhutan, India, sacred sites, Padmasambhava, Buddhist temples" />
     
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type === 'article' ? 'article' : 'website'} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={siteTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:alt" content={title} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="en_US" />
+    {publishedDate && <meta property="article:published_time" content={publishedDate.toISOString()} />}
+    {modifiedDate && <meta property="article:modified_time" content={modifiedDate.toISOString()} />}
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={siteTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={title} />
     
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <link rel="apple-touch-icon" href={`${base}favicon.svg`} />
+    
+    <!-- JSON-LD Structured Data -->
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

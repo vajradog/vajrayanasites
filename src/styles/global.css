@@ -1,3 +1,4 @@
+/* Fonts loaded via preconnect in BaseLayout for better performance */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+Tibetan:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -15,6 +16,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
@@ -23,6 +25,18 @@
       radial-gradient(ellipse at top, rgba(212, 160, 23, 0.03) 0%, transparent 50%),
       radial-gradient(ellipse at bottom, rgba(139, 92, 29, 0.02) 0%, transparent 50%);
     min-height: 100vh;
+  }
+
+  /* Reduce motion for users who prefer it */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   /* Custom scrollbar */

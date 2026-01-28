@@ -66,7 +66,7 @@ const regions = [
       
       <!-- Region Cards -->
       <div class="space-y-12">
-        {regions.map((region, index) => (
+        {regions.map((region) => (
           <a 
             href={`${base}regions/${region.slug}`}
             class={`group block relative overflow-hidden rounded-3xl border ${region.borderColor} hover:border-gold-600/50 transition-all duration-500`}
