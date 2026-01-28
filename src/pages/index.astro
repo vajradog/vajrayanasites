@@ -1,0 +1,250 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SiteCard from '@/components/SiteCard.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+
+// Fetch sites from collection
+const allSites = await getCollection('sites');
+
+// Featured site slugs
+const featuredSlugs = [
+  'tibet/mount-kailash',
+  'tibet/samye-monastery', 
+  'nepal/pharping',
+  'bhutan/taktsang',
+  'nepal/maratika',
+  'tibet/tidrum',
+];
+
+// Get featured sites from collection
+const featuredSites = featuredSlugs
+  .map(slug => allSites.find(site => site.slug === slug))
+  .filter((site): site is NonNullable<typeof site> => site !== undefined);
+
+const regions = [
+  { 
+    name: 'Tibet', 
+    nametibet: 'བོད',
+    count: 6, 
+    description: 'Where Padmasambhava established Vajrayana, Milarepa contested with Bön masters, and Yeshe Tsogyal achieved rainbow body.',
+    color: 'from-robe-600/20 to-robe-800/20'
+  },
+  { 
+    name: 'Nepal', 
+    nametibet: 'བལ་ཡུལ',
+    count: 3, 
+    description: 'Caves where Padmasambhava attained Mahamudra and immortality — the crucible of his supreme accomplishments.',
+    color: 'from-turquoise-500/20 to-turquoise-700/20'
+  },
+  { 
+    name: 'India', 
+    nametibet: 'རྒྱ་གར',
+    count: 3, 
+    description: 'The Lotus Lake of Padmasambhava\'s miracles and the hidden beyul of Sikkim with its liberation-through-seeing stupa.',
+    color: 'from-gold-600/20 to-gold-800/20'
+  },
+  { 
+    name: 'Bhutan', 
+    nametibet: 'འབྲུག་ཡུལ',
+    count: 2, 
+    description: 'Tiger\'s Nest and the body imprint cave — where Padmasambhava\'s presence remains tangibly pressed into rock.',
+    color: 'from-sky-500/20 to-sky-700/20'
+  },
+];
+---
+
+<BaseLayout title="Vajrayana Pilgrimage Sites">
+  <!-- Hero Section -->
+  <Hero 
+    title="Sacred Sites"
+    titleTibetan="གནས་ཆེན་རྣམས"
+    subtitle="Vajrayana Pilgrimage Guide"
+    description="The power places where Padmasambhava, Yeshe Tsogyal, and the Mahasiddhas achieved realization. Sites where their blessing remains accessible to those who come with devotion."
+    size="full"
+  >
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href={`${base}sites`} class="btn-primary">
+        Explore All Sites
+      </a>
+      <a href={`${base}about`} class="btn-secondary">
+        About Pilgrimage
+      </a>
+    </div>
+  </Hero>
+  
+  <!-- Main content -->
+  <div id="content">
+    <!-- Introduction Section -->
+    <section class="py-24 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="sacred-divider mb-12">
+          <span class="tibetan-ornament">༄༅།</span>
+        </div>
+        
+        <h2 class="font-display text-3xl md:text-4xl text-gold-100 mb-8 animate-on-scroll">
+          Where the Masters Achieved Realization
+        </h2>
+        
+        <div class="space-y-6 text-lg text-sacred-300 leading-relaxed animate-on-scroll">
+          <p>
+            These are not merely historical sites. In the Vajrayana understanding, when a master 
+            achieves realization in a place, that accomplishment leaves a permanent imprint. The 
+            blessing remains — accessible to future practitioners who come with faith.
+          </p>
+          <p>
+            Padmasambhava's handprint in the rock at Pharping. Yeshe Tsogyal's hot springs at 
+            Tidrum. The body imprint at Kurje. These are not metaphors — they are <strong class="text-gold-300">tangible 
+            evidence</strong> of tantric accomplishment, and doorways through which that 
+            accomplishment can be transmitted.
+          </p>
+        </div>
+        
+        <div class="sacred-divider mt-12">
+          <span class="tibetan-ornament">༔</span>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Featured Sites Section -->
+    <section class="py-24 px-4 sm:px-6 lg:px-8 bg-sacred-900/30">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="text-gold-500 text-sm uppercase tracking-[0.2em] mb-4 animate-on-scroll">
+            Power Places
+          </p>
+          <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-gold-100 animate-on-scroll">
+            Featured Sacred Sites
+          </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredSites.map((site, index) => (
+            <div class="animate-on-scroll" style={`animation-delay: ${index * 0.1}s`}>
+              <SiteCard 
+                title={site.data.title}
+                titleTibetan={site.data.titleTibetan}
+                slug={site.slug}
+                region={site.data.region}
+                description={site.data.description}
+                image={site.data.image}
+                significance={site.data.significance}
+                associatedFigures={site.data.associatedFigures}
+              />
+            </div>
+          ))}
+        </div>
+        
+        <div class="text-center mt-12">
+          <a href={`${base}sites`} class="btn-secondary">
+            View All Sacred Sites
+            <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Regions Section -->
+    <section class="py-24 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-16">
+          <p class="text-gold-500 text-sm uppercase tracking-[0.2em] mb-4 animate-on-scroll">
+            Explore by Region
+          </p>
+          <h2 class="font-display text-3xl md:text-4xl lg:text-5xl text-gold-100 animate-on-scroll">
+            Lands of Accomplishment
+          </h2>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {regions.map((region, index) => (
+            <a 
+              href={`${base}regions/${region.name.toLowerCase()}`}
+              class="group relative p-8 rounded-2xl border border-sacred-700/30 bg-sacred-900/30 hover:border-gold-600/30 transition-all duration-500 animate-on-scroll"
+              style={`animation-delay: ${index * 0.1}s`}
+            >
+              <!-- Background gradient -->
+              <div class={`absolute inset-0 rounded-2xl bg-gradient-to-br ${region.color} opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+              
+              <div class="relative">
+                <div class="flex items-baseline justify-between mb-4">
+                  <h3 class="font-display text-2xl text-gold-100 group-hover:text-gold-300 transition-colors">
+                    {region.name}
+                  </h3>
+                  <span class="font-tibetan text-lg text-gold-500/50">
+                    {region.nametibet}
+                  </span>
+                </div>
+                
+                <p class="text-sacred-400 text-sm leading-relaxed mb-4">
+                  {region.description}
+                </p>
+                
+                <div class="flex items-center justify-between">
+                  <span class="text-xs text-sacred-500">
+                    {region.count} sacred sites
+                  </span>
+                  <svg 
+                    class="w-5 h-5 text-gold-500 transform group-hover:translate-x-2 transition-transform duration-300" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- Quote Section -->
+    <section class="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <!-- Background glow -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="w-[600px] h-[600px] bg-gold-500/5 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="relative max-w-4xl mx-auto text-center">
+        <div class="tibetan-ornament mb-8 animate-on-scroll">༄༅། །</div>
+        
+        <blockquote class="font-display text-2xl md:text-3xl lg:text-4xl text-gold-100 leading-relaxed mb-8 animate-on-scroll">
+          "In the place where I achieved realization, my blessing will remain until the end of 
+          this kalpa. Those who come there with faith will receive it."
+        </blockquote>
+        
+        <cite class="text-gold-500 text-lg animate-on-scroll">
+          — Padmasambhava
+        </cite>
+      </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-sacred-900/50 to-sacred-950">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="font-display text-3xl md:text-4xl text-gold-100 mb-6 animate-on-scroll">
+          Begin Your Journey
+        </h2>
+        <p class="text-lg text-sacred-300 mb-10 animate-on-scroll">
+          Whether you're planning a physical pilgrimage or seeking to connect with these 
+          sacred sites through study and practice, this guide offers the history, 
+          significance, and practical information for each né.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-on-scroll">
+          <a href={`${base}sites`} class="btn-primary">
+            Explore Sacred Sites
+          </a>
+          <a href={`${base}practices`} class="btn-secondary">
+            Pilgrimage Practices
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

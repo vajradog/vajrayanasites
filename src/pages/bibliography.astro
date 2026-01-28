@@ -1,0 +1,258 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const books = [
+  {
+    title: "Sacred Ground: Jamgon Kongtrul on Pilgrimage and Sacred Geography",
+    author: "Ngawang Zangpo (translator)",
+    year: "2001",
+    publisher: "Snow Lion Publications",
+    description: "Translation of Jamgon Kongtrul's pilgrimage guide with commentary on the Vajrayana understanding of sacred places."
+  },
+  {
+    title: "The Life and Liberation of Padmasambhava",
+    author: "Yeshe Tsogyal, translated by Kenneth Douglas and Gwendolyn Bays",
+    year: "1978",
+    publisher: "Dharma Publishing",
+    description: "The primary Tibetan biography of Guru Rinpoche, including accounts of his travels and establishment of Buddhist sacred sites."
+  },
+  {
+    title: "Cave in the Snow: Tenzin Palmo's Quest for Enlightenment",
+    author: "Vicki Mackenzie",
+    year: "1998",
+    publisher: "Bloomsbury",
+    description: "Account of a Western woman's twelve years in retreat in a Himalayan cave, offering insight into meditation practice at sacred sites."
+  },
+  {
+    title: "The Cult of Pure Crystal Mountain: Popular Pilgrimage and Visionary Landscape in Southeast Tibet",
+    author: "Toni Huber",
+    year: "1999",
+    publisher: "Oxford University Press",
+    description: "Academic study of pilgrimage traditions around Tsari, one of Tibet's most sacred pilgrimage sites."
+  },
+  {
+    title: "Circling the Sacred Mountain: A Spiritual Adventure Through the Himalayas",
+    author: "Robert Thurman and Tad Wise",
+    year: "1999",
+    publisher: "Bantam Books",
+    description: "Account of pilgrimage to Mount Kailash with teachings on the spiritual significance of the journey."
+  },
+  {
+    title: "The Power-Places of Central Tibet: The Pilgrim's Guide",
+    author: "Keith Dowman",
+    year: "1988",
+    publisher: "Routledge & Kegan Paul",
+    description: "Comprehensive guide to sacred sites in central Tibet, combining historical research with practical pilgrimage information."
+  },
+  {
+    title: "The Sacred Life of Tibet",
+    author: "Keith Dowman",
+    year: "1997",
+    publisher: "Thorsons",
+    description: "Overview of Tibetan Buddhist sacred geography and the pilgrimage traditions that engage with it."
+  },
+  {
+    title: "Tibet Handbook with Bhutan",
+    author: "Gyurme Dorje",
+    year: "2009",
+    publisher: "Footprint Handbooks",
+    description: "The most comprehensive guidebook to Tibet and Bhutan, with detailed information on sacred sites."
+  },
+  {
+    title: "A Guide to the Bodhisattva Way of Life (Bodhicaryavatara)",
+    author: "Shantideva, translated by Vesna Wallace and Alan Wallace",
+    year: "1997",
+    publisher: "Snow Lion Publications",
+    description: "Classic text on the bodhisattva path, essential background for understanding the motivation behind pilgrimage."
+  },
+  {
+    title: "The Lotus-Born: The Life Story of Padmasambhava",
+    author: "Yeshe Tsogyal, revealed by Nyang Ral Nyima Öser, translated by Erik Pema Kunsang",
+    year: "1993",
+    publisher: "Rangjung Yeshe Publications",
+    description: "Another translation of Padmasambhava's biography with emphasis on his activities in Tibet."
+  },
+  {
+    title: "Kailas: On Pilgrimage to the Sacred Mountain of Tibet",
+    author: "Kerry Moran",
+    year: "1989",
+    publisher: "Snow Lion Publications",
+    description: "Photographic and written account of pilgrimage to Mount Kailash."
+  },
+  {
+    title: "The Tibet Guide",
+    author: "Stephen Batchelor",
+    year: "1988",
+    publisher: "Wisdom Publications",
+    description: "Pilgrimage guide combining practical travel information with historical and religious context."
+  }
+];
+
+const academicResources = [
+  {
+    title: "Pilgrimage in Tibet",
+    author: "Edited by Alex McKay",
+    year: "1998",
+    publisher: "Curzon Press",
+    description: "Collection of academic essays on various aspects of Tibetan pilgrimage traditions."
+  },
+  {
+    title: "Religions of Tibet in Practice",
+    author: "Edited by Donald S. Lopez Jr.",
+    year: "1997",
+    publisher: "Princeton University Press",
+    description: "Academic anthology including primary source translations related to pilgrimage and sacred sites."
+  },
+  {
+    title: "The Hidden Land of Sikkim: Travel Writing from the Early Modern Period to the 21st Century",
+    author: "Edited by Alex McKay",
+    year: "2019",
+    publisher: "Brill",
+    description: "Collection of historical and contemporary writings on Sikkim as a sacred hidden valley."
+  }
+];
+
+const onlineResources = [
+  {
+    title: "Treasury of Lives",
+    url: "https://treasuryoflives.org/",
+    description: "Biographical dictionary of Tibet, Inner Asia, and the Himalayan Region, including entries on masters associated with sacred sites."
+  },
+  {
+    title: "Himalayan Art Resources",
+    url: "https://www.himalayanart.org/",
+    description: "Database of Himalayan Buddhist art, helpful for understanding iconography encountered at sacred sites."
+  },
+  {
+    title: "BDRC (Buddhist Digital Resource Center)",
+    url: "https://www.bdrc.io/",
+    description: "Digital library of Buddhist texts, including historical pilgrimage guides and accounts."
+  },
+  {
+    title: "The Tibetan Buddhist Resource Center",
+    url: "https://www.tbrc.org/",
+    description: "Comprehensive digital library of Tibetan texts."
+  }
+];
+---
+
+<BaseLayout 
+  title="Bibliography"
+  description="Recommended reading and resources for understanding Vajrayana Buddhist pilgrimage"
+>
+  <Hero 
+    title="Bibliography"
+    titleTibetan="དཔེ་ཆའི་ཐོ་གཞུང"
+    subtitle="Recommended Resources"
+    description="Books, academic works, and online resources for deeper study of Vajrayana pilgrimage traditions"
+    size="medium"
+    showScroll={false}
+  />
+  
+  <div class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Books Section -->
+      <section class="mb-16">
+        <h2 class="font-display text-3xl text-gold-100 mb-8">Books</h2>
+        
+        <div class="space-y-6">
+          {books.map(book => (
+            <div class="p-6 rounded-xl bg-sacred-900/30 border border-sacred-700/30">
+              <h3 class="font-display text-lg text-gold-200 mb-2">
+                {book.title}
+              </h3>
+              <p class="text-sm text-sacred-400 mb-3">
+                {book.author} ({book.year}). {book.publisher}.
+              </p>
+              <p class="text-sacred-300 text-sm leading-relaxed">
+                {book.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      <div class="sacred-divider">
+        <span class="tibetan-ornament">༔</span>
+      </div>
+      
+      <!-- Academic Resources Section -->
+      <section class="my-16">
+        <h2 class="font-display text-3xl text-gold-100 mb-8">Academic Resources</h2>
+        
+        <div class="space-y-6">
+          {academicResources.map(resource => (
+            <div class="p-6 rounded-xl bg-sacred-900/30 border border-sacred-700/30">
+              <h3 class="font-display text-lg text-gold-200 mb-2">
+                {resource.title}
+              </h3>
+              <p class="text-sm text-sacred-400 mb-3">
+                {resource.author} ({resource.year}). {resource.publisher}.
+              </p>
+              <p class="text-sacred-300 text-sm leading-relaxed">
+                {resource.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      <div class="sacred-divider">
+        <span class="tibetan-ornament">༔</span>
+      </div>
+      
+      <!-- Online Resources Section -->
+      <section class="my-16">
+        <h2 class="font-display text-3xl text-gold-100 mb-8">Online Resources</h2>
+        
+        <div class="space-y-6">
+          {onlineResources.map(resource => (
+            <div class="p-6 rounded-xl bg-sacred-900/30 border border-sacred-700/30">
+              <h3 class="font-display text-lg text-gold-200 mb-2">
+                <a 
+                  href={resource.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  class="hover:text-gold-400 transition-colors"
+                >
+                  {resource.title}
+                  <svg class="inline-block w-4 h-4 ml-1 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </h3>
+              <p class="text-sacred-300 text-sm leading-relaxed">
+                {resource.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      <!-- Note -->
+      <div class="mt-12 p-6 rounded-xl bg-gold-600/5 border border-gold-600/20">
+        <p class="text-sacred-300 text-sm leading-relaxed">
+          <strong class="text-gold-200">Note:</strong> This bibliography focuses on English-language resources accessible 
+          to general readers. Scholarly research and traditional Tibetan sources provide much deeper information but 
+          require specialized knowledge to access. Serious students are encouraged to seek guidance from qualified 
+          teachers who can direct them to appropriate sources for their level of study.
+        </p>
+      </div>
+      
+      <!-- Navigation -->
+      <div class="mt-16 pt-8 border-t border-sacred-700/30 flex justify-center gap-4">
+        <a href={`${base}glossary`} class="btn-primary">
+          View Glossary
+        </a>
+        <a href={`${base}sites`} class="btn-secondary">
+          Explore Sites
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</BaseLayout>

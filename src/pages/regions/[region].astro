@@ -1,0 +1,194 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SiteCard from '@/components/SiteCard.astro';
+import { getCollection } from 'astro:content';
+
+const base = import.meta.env.BASE_URL;
+
+// Static paths for all regions
+export function getStaticPaths() {
+  return [
+    { params: { region: 'tibet' } },
+    { params: { region: 'nepal' } },
+    { params: { region: 'india' } },
+    { params: { region: 'bhutan' } },
+  ];
+}
+
+// Define regions with their data
+const regionsData: Record<string, {
+  name: string;
+  tibetan: string;
+  wylie: string;
+  description: string;
+  longDescription: string;
+  keyFeatures: string[];
+}> = {
+  tibet: {
+    name: 'Tibet',
+    tibetan: 'བོད',
+    wylie: 'bod',
+    description: 'Where Padmasambhava established Vajrayana, Milarepa won his legendary tantric contest, and Yeshe Tsogyal achieved rainbow body.',
+    longDescription: `Tibet is the heartland of Vajrayana Buddhism — not merely as a repository of teachings, but as the land where the greatest tantric accomplishments occurred.
+
+When Padmasambhava arrived in the 8th century at the invitation of King Trisong Detsen, he did more than teach. He practiced. In caves throughout Tibet, he achieved the highest realizations of the tantric path, leaving impressions in rock, blessing waters, and establishing the terma tradition that would preserve his teachings for future generations.
+
+His consort Yeshe Tsogyal practiced alongside him, eventually achieving the rainbow body at Tidrum. Milarepa, centuries later, won his famous contest with the Bön master Naro Bonchung at Mount Kailash through sheer tantric accomplishment.
+
+These are not legends. The handprints remain in the rock. The hot springs still flow. The caves still carry the blessing of what was accomplished there.`,
+    keyFeatures: [
+      'Mount Kailash — abode of Chakrasamvara, site of Milarepa\'s tantric contest',
+      'Samye — where Padmasambhava established Vajrayana and the terma tradition',
+      'Chimpu — over 100 caves of realized masters including Padmasambhava and Yeshe Tsogyal',
+      'Drak Yerpa — Padmasambhava\'s seven-month Vajrakilaya retreat',
+      'Tidrum — Yeshe Tsogyal\'s rainbow body accomplishment site'
+    ],
+  },
+  nepal: {
+    name: 'Nepal',
+    tibetan: 'བལ་ཡུལ',
+    wylie: 'bal yul',
+    description: 'The caves where Padmasambhava attained Mahamudra Vidyadhara and achieved immortality with Mandarava.',
+    longDescription: `Nepal was the crucible of Padmasambhava's supreme accomplishments. Before he could bring Vajrayana to Tibet, he had to achieve the highest realizations himself. He did so in the caves of Nepal.
+
+At Pharping (Yanglesho), he practiced intensively until he attained the level of Mahamudra Vidyadhara — complete mastery of the nature of mind. His handprint, pressed into solid rock during this accomplishment, remains visible today in the Asura Cave.
+
+At Maratika, he and his consort Mandarava practiced the sadhana of Amitayus for three months until Amitayus himself appeared and granted them the siddhi of immortality. This was not merely long life, but transcendence of the ordinary process of death and rebirth.
+
+At Muktinath, in the high Mustang region, the 84 Mahasiddhas are said to have practiced, and Padmasambhava blessed the site where fire and water miraculously meet.
+
+These caves are not museums. The accomplishment that occurred there remains accessible to practitioners who come with faith.`,
+    keyFeatures: [
+      'Pharping — Padmasambhava\'s Mahamudra and Vajrakilaya accomplishment, handprint in rock',
+      'Maratika — where Padmasambhava and Mandarava achieved immortality',
+      'Muktinath — site of the 84 Mahasiddhas, eternal flames and holy springs'
+    ],
+  },
+  india: {
+    name: 'India',
+    tibetan: 'རྒྱ་གར',
+    wylie: 'rgya gar',
+    description: 'The Lotus Lake of Padmasambhava\'s miracles and the hidden beyul of Sikkim prophesied by Guru Rinpoche.',
+    longDescription: `India holds two distinct types of Vajrayana sacred sites: the places of Padmasambhava's miracles, and the hidden valleys (beyul) he prophesied as sanctuaries.
+
+At Rewalsar (Tso Pema), Padmasambhava performed one of his most famous miracles. When the king of Zahor tried to burn him alive for teaching the princess Mandarava, Guru Rinpoche transformed the flames into a lake. He sat serenely on a lotus in its center. The floating reed islands that drift across Tso Pema today are said to be remnants of that miraculous lotus.
+
+Sikkim is a different kind of sacred site — a beyul or hidden valley that Padmasambhava prophesied would open as a sanctuary during times of strife. In 1641, three lamas converged on Sikkim from three directions, fulfilling prophecy and establishing Buddhism there.
+
+Tashiding Monastery houses the Thongwa Rangdol — a stupa so powerful that merely seeing it plants seeds of liberation. Pemayangtse contains a seven-tiered model of Padmasambhava's celestial realm, Sangthokpalri.`,
+    keyFeatures: [
+      'Rewalsar (Tso Pema) — the Lotus Lake of Padmasambhava\'s miracle',
+      'Tashiding — the Thongwa Rangdol stupa of liberation through seeing',
+      'Pemayangtse — Sangthokpalri model, Nyingma seat in Sikkim'
+    ],
+  },
+  bhutan: {
+    name: 'Bhutan',
+    tibetan: 'འབྲུག་ཡུལ',
+    wylie: '\'brug yul',
+    description: 'Tiger\'s Nest where Padmasambhava arrived on a tigress, and Kurje where his body imprint remains pressed into rock.',
+    longDescription: `Bhutan — Druk Yul, "Land of the Thunder Dragon" — bears Padmasambhava's presence more tangibly than perhaps anywhere else. Here, his blessing is not abstract but physical, pressed into the very rock.
+
+Taktsang, the Tiger's Nest, clings impossibly to a cliff 900 meters above the Paro Valley. This is where Padmasambhava arrived flying on a tigress, manifesting as Dorje Drolo, the wrathful form that subdues demons and obstacles. The site pulses with that wrathful blessing energy.
+
+At Kurje Lhakhang in Bumthang, Padmasambhava left his body imprint (kurje means "body print") pressed into a rock while meditating in a cave. This is not metaphor — pilgrims can see the impression, can touch where the master's form pressed into stone.
+
+These two sites capture the essence of Vajrayana pilgrimage in Bhutan: tangible evidence of the master's presence, accessible blessing that remains as powerful today as when it was first established.`,
+    keyFeatures: [
+      'Taktsang — Padmasambhava arrived as Dorje Drolo on a tigress',
+      'Kurje Lhakhang — Padmasambhava\'s body imprint pressed into rock'
+    ],
+  },
+};
+
+// Fetch sites from collection
+const allSites = await getCollection('sites');
+const { region } = Astro.params;
+const regionData = regionsData[region as string];
+
+// Filter sites for this region
+const sites = allSites
+  .filter(site => site.data.region === region)
+  .sort((a, b) => {
+    if (b.data.significance !== a.data.significance) {
+      return (b.data.significance || 3) - (a.data.significance || 3);
+    }
+    return a.data.title.localeCompare(b.data.title);
+  });
+---
+
+<BaseLayout 
+  title={regionData.name}
+  description={regionData.description}
+>
+  <Hero 
+    title={regionData.name}
+    titleTibetan={regionData.tibetan}
+    subtitle="Land of Accomplishment"
+    description={regionData.description}
+    size="large"
+    showScroll={true}
+  />
+  
+  <div id="content" class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Introduction -->
+      <section class="mb-20">
+        <div class="max-w-4xl">
+          <div class="prose-sacred text-lg leading-relaxed whitespace-pre-line">
+            {regionData.longDescription}
+          </div>
+        </div>
+      </section>
+      
+      <!-- Key Features -->
+      <section class="mb-20">
+        <h2 class="font-display text-2xl text-gold-100 mb-8">Power Places</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {regionData.keyFeatures.map(feature => (
+            <div class="flex items-start gap-4 p-6 bg-sacred-900/50 rounded-xl border border-sacred-700/30">
+              <span class="text-gold-500 text-xl">༔</span>
+              <p class="text-sacred-300">{feature}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      
+      <!-- Sacred Sites -->
+      <section>
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="font-display text-2xl text-gold-100">Sacred Sites in {regionData.name}</h2>
+          <span class="text-sm text-sacred-500">{sites.length} sites</span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sites.map((site) => (
+            <SiteCard 
+              title={site.data.title}
+              titleTibetan={site.data.titleTibetan}
+              slug={site.slug}
+              region={site.data.region}
+              description={site.data.description}
+              image={site.data.image}
+              significance={site.data.significance}
+              associatedFigures={site.data.associatedFigures}
+            />
+          ))}
+        </div>
+      </section>
+      
+      <!-- Back link -->
+      <div class="mt-16 text-center">
+        <a href={`${base}regions`} class="btn-secondary">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+          </svg>
+          Back to All Regions
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</BaseLayout>

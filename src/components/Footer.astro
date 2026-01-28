@@ -1,0 +1,118 @@
+---
+const base = import.meta.env.BASE_URL;
+
+const regions = [
+  { name: 'Tibet', href: `${base}regions/tibet` },
+  { name: 'Nepal', href: `${base}regions/nepal` },
+  { name: 'India', href: `${base}regions/india` },
+  { name: 'Bhutan', href: `${base}regions/bhutan` },
+  { name: 'Sikkim', href: `${base}regions/sikkim` },
+];
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="relative mt-32">
+  <!-- Top gradient border -->
+  <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-600/30 to-transparent"></div>
+  
+  <!-- Background texture -->
+  <div class="absolute inset-0 bg-sacred-900/50"></div>
+  
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <!-- Brand column -->
+      <div class="lg:col-span-2">
+        <div class="flex items-center gap-3 mb-6">
+          <!-- Dharma wheel icon -->
+          <div class="w-8 h-8 text-gold-500">
+            <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5" class="w-full h-full">
+              <circle cx="20" cy="20" r="18" />
+              <circle cx="20" cy="20" r="6" />
+              <line x1="20" y1="2" x2="20" y2="14" />
+              <line x1="20" y1="26" x2="20" y2="38" />
+              <line x1="2" y1="20" x2="14" y2="20" />
+              <line x1="26" y1="20" x2="38" y2="20" />
+            </svg>
+          </div>
+          <span class="font-display text-xl font-medium text-gold-100">Vajrayana Pilgrimage</span>
+        </div>
+        
+        <p class="text-sacred-400 max-w-md leading-relaxed mb-6">
+          A comprehensive guide to sacred Vajrayana Buddhist pilgrimage sites across the Himalayas. 
+          May this resource benefit all beings on the path to awakening.
+        </p>
+        
+        <!-- Tibetan blessing -->
+        <p class="font-tibetan text-gold-500/70 text-sm">
+          སེམས་ཅན་ཐམས་ཅད་བདེ་བ་དང་བདེ་བའི་རྒྱུ་དང་ལྡན་པར་གྱུར་ཅིག།
+        </p>
+        <p class="text-xs text-sacred-500 mt-1 italic">
+          May all sentient beings have happiness and the causes of happiness.
+        </p>
+      </div>
+      
+      <!-- Regions column -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gold-400 mb-6">
+          Regions
+        </h3>
+        <ul class="space-y-3">
+          {regions.map(region => (
+            <li>
+              <a 
+                href={region.href}
+                class="text-sacred-400 hover:text-gold-400 transition-colors duration-300"
+              >
+                {region.name}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      <!-- Resources column -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-widest text-gold-400 mb-6">
+          Resources
+        </h3>
+        <ul class="space-y-3">
+          <li>
+            <a href={`${base}about`} class="text-sacred-400 hover:text-gold-400 transition-colors duration-300">
+              About This Guide
+            </a>
+          </li>
+          <li>
+            <a href={`${base}practices`} class="text-sacred-400 hover:text-gold-400 transition-colors duration-300">
+              Pilgrimage Practices
+            </a>
+          </li>
+          <li>
+            <a href={`${base}glossary`} class="text-sacred-400 hover:text-gold-400 transition-colors duration-300">
+              Glossary
+            </a>
+          </li>
+          <li>
+            <a href={`${base}bibliography`} class="text-sacred-400 hover:text-gold-400 transition-colors duration-300">
+              Bibliography
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Bottom section -->
+    <div class="mt-16 pt-8 border-t border-sacred-800/50">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-sm text-sacred-500">
+          © {currentYear} Vajrayana Pilgrimage Guide. Created with devotion.
+        </p>
+        
+        <!-- Dedication -->
+        <p class="text-sm text-sacred-500 italic">
+          Dedicated to all teachers of the lineage
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,202 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+---
+
+<BaseLayout 
+  title="About"
+  description="About the Vajrayana Pilgrimage Guide - a comprehensive resource for Buddhist sacred sites across the Himalayas"
+>
+  <Hero 
+    title="About This Guide"
+    titleTibetan="སྐོར"
+    subtitle="Purpose & Vision"
+    description="A digital resource dedicated to preserving and sharing knowledge of Vajrayana Buddhist pilgrimage sites."
+    size="medium"
+    showScroll={false}
+  />
+  
+  <div class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Introduction -->
+      <section class="mb-16">
+        <div class="prose-sacred text-lg leading-relaxed space-y-6">
+          <p>
+            This guide was created to serve pilgrims — whether they journey physically to sacred sites 
+            or connect with them through study and practice. Our aim is to provide comprehensive, 
+            accurate information about Vajrayana Buddhist power places, presented with the depth and 
+            respect these sacred sites deserve.
+          </p>
+          <p>
+            The Vajrayana tradition places great emphasis on <strong class="text-gold-300">né</strong> (གནས) — 
+            power places where realized masters have practiced and left their blessings. These sites are not 
+            merely historical monuments but living sources of spiritual power, accessible to those who 
+            approach them with faith and proper understanding.
+          </p>
+        </div>
+      </section>
+      
+      <!-- Sacred Divider -->
+      <div class="sacred-divider">
+        <span class="tibetan-ornament">༄༅།</span>
+      </div>
+      
+      <!-- What Makes Pilgrimage -->
+      <section class="my-16">
+        <h2 class="font-display text-3xl text-gold-100 mb-8">What Makes Pilgrimage</h2>
+        
+        <div class="prose-sacred text-lg leading-relaxed space-y-6">
+          <p>
+            In the Buddhist understanding, pilgrimage is not tourism. It is a spiritual practice with 
+            specific purposes and methods:
+          </p>
+          
+          <h3 class="font-display text-xl text-gold-200 mt-8 mb-4">Accumulating Merit</h3>
+          <p>
+            Visiting sacred sites, making offerings, and performing practices there creates positive karma 
+            that supports spiritual development. The merit accumulated at power places is said to be 
+            multiplied many times compared to ordinary locations.
+          </p>
+          
+          <h3 class="font-display text-xl text-gold-200 mt-8 mb-4">Receiving Blessings</h3>
+          <p>
+            Places where great masters practiced retain their spiritual power. By visiting with faith, 
+            pilgrims open themselves to receive the accumulated blessings of all who have practiced there.
+          </p>
+          
+          <h3 class="font-display text-xl text-gold-200 mt-8 mb-4">Purifying Obscurations</h3>
+          <p>
+            The physical hardship of pilgrimage, combined with devotional practices performed at sacred 
+            sites, helps purify the mental and karmic obscurations that prevent awakening.
+          </p>
+          
+          <h3 class="font-display text-xl text-gold-200 mt-8 mb-4">Connecting with Lineage</h3>
+          <p>
+            By visiting sites associated with the masters of one's lineage, practitioners strengthen 
+            their connection to the transmission that carries the dharma through time.
+          </p>
+        </div>
+      </section>
+      
+      <!-- Sacred Divider -->
+      <div class="sacred-divider">
+        <span class="tibetan-ornament">༔</span>
+      </div>
+      
+      <!-- How to Use This Guide -->
+      <section class="my-16">
+        <h2 class="font-display text-3xl text-gold-100 mb-8">How to Use This Guide</h2>
+        
+        <div class="prose-sacred text-lg leading-relaxed space-y-6">
+          <p>
+            Each site entry in this guide includes:
+          </p>
+          
+          <ul class="space-y-3 pl-6">
+            <li class="flex items-start gap-3">
+              <span class="text-gold-500">•</span>
+              <span><strong class="text-gold-300">Historical background</strong> — the stories of founding, the masters who practiced there, significant events</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold-500">•</span>
+              <span><strong class="text-gold-300">Spiritual significance</strong> — why this site is considered sacred, what blessings it offers</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold-500">•</span>
+              <span><strong class="text-gold-300">Recommended practices</strong> — traditional ways to engage with the site's power</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold-500">•</span>
+              <span><strong class="text-gold-300">Practical information</strong> — location, access, permits, best seasons</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-gold-500">•</span>
+              <span><strong class="text-gold-300">Related sites</strong> — other power places connected by geography or lineage</span>
+            </li>
+          </ul>
+          
+          <p class="mt-8">
+            We encourage readers to use this information as a starting point, not an endpoint. Consult with 
+            teachers, study the practices associated with sites you plan to visit, and approach pilgrimage 
+            as the spiritual practice it is meant to be.
+          </p>
+        </div>
+      </section>
+      
+      <!-- Sacred Divider -->
+      <div class="sacred-divider">
+        <span class="tibetan-ornament">༁ྃ</span>
+      </div>
+      
+      <!-- A Note on Accuracy -->
+      <section class="my-16">
+        <h2 class="font-display text-3xl text-gold-100 mb-8">A Note on Sources</h2>
+        
+        <div class="prose-sacred text-lg leading-relaxed space-y-6">
+          <p>
+            The information in this guide draws from traditional Tibetan sources, historical records, 
+            pilgrimage guides written by realized masters, and modern scholarship. Where accounts differ, 
+            we have tried to present the traditional understanding while acknowledging variations.
+          </p>
+          <p>
+            Sacred sites have living histories — they change, are rebuilt, face destruction and renewal. 
+            We strive to keep information current while honoring the timeless nature of the blessings 
+            these places carry.
+          </p>
+          <p>
+            If you notice errors or have additional information to contribute, we welcome your feedback. 
+            This guide is offered as a service to the dharma community and benefits from collective 
+            knowledge and correction.
+          </p>
+        </div>
+      </section>
+      
+      <!-- Dedication -->
+      <section class="my-16 p-8 bg-gold-600/5 rounded-2xl border border-gold-600/20">
+        <h2 class="font-display text-2xl text-gold-100 mb-6 text-center">Dedication</h2>
+        
+        <div class="text-center space-y-4">
+          <p class="font-tibetan text-xl text-gold-400">
+            འགྲོ་བ་སེམས་ཅན་ཐམས་ཅད་བདེ་བ་དང་བདེ་བའི་རྒྱུ་དང་ལྡན་པར་གྱུར་ཅིག།
+          </p>
+          <p class="text-sacred-300 italic">
+            May all sentient beings have happiness and the causes of happiness.
+          </p>
+          <p class="font-tibetan text-xl text-gold-400 mt-4">
+            སྡུག་བསྔལ་དང་སྡུག་བསྔལ་གྱི་རྒྱུ་དང་བྲལ་བར་གྱུར་ཅིག།
+          </p>
+          <p class="text-sacred-300 italic">
+            May they be free from suffering and the causes of suffering.
+          </p>
+        </div>
+        
+        <div class="mt-8 text-center text-sacred-400 text-sm">
+          <p>
+            Whatever merit arises from this work is dedicated to the benefit of all beings.
+          </p>
+        </div>
+      </section>
+      
+      <!-- Contact/Contribute -->
+      <section class="mt-16 text-center">
+        <h2 class="font-display text-2xl text-gold-100 mb-4">Contribute</h2>
+        <p class="text-sacred-400 mb-6">
+          This is an open project. Contributions, corrections, and suggestions are welcome.
+        </p>
+        <a 
+          href="https://github.com/vajradog/vajrayana-pilgrimage" 
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-secondary"
+        >
+          View on GitHub
+          <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        </a>
+      </section>
+      
+    </div>
+  </div>
+</BaseLayout>

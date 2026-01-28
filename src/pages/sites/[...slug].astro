@@ -1,0 +1,343 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+
+const base = import.meta.env.BASE_URL;
+
+export async function getStaticPaths() {
+  const sites = await getCollection('sites');
+  return sites.map(site => ({
+    params: { slug: site.slug },
+    props: { site },
+  }));
+}
+
+const { site } = Astro.props;
+const { Content } = await site.render();
+
+function formatRegion(region: string) {
+  return region.charAt(0).toUpperCase() + region.slice(1);
+}
+
+const regionColors: Record<string, string> = {
+  tibet: 'text-robe-400',
+  nepal: 'text-turquoise-400',
+  india: 'text-gold-400',
+  bhutan: 'text-sky-400',
+  sikkim: 'text-emerald-400',
+};
+
+// Get placeholder image URL
+const placeholderUrl = `${base}images/placeholder.svg`;
+---
+
+<BaseLayout 
+  title={site.data.title}
+  description={site.data.description}
+>
+  <!-- Hero Section -->
+  <section class="relative min-h-[70vh] flex items-end overflow-hidden">
+    <!-- Background image -->
+    <div class="absolute inset-0">
+      {site.data.image ? (
+        <Image 
+          src={site.data.image} 
+          alt={site.data.title}
+          class="w-full h-full object-cover"
+          loading="eager"
+          widths={[640, 960, 1280, 1920]}
+          sizes="100vw"
+        />
+      ) : (
+        <img 
+          src={placeholderUrl} 
+          alt={site.data.title}
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+      )}
+      <div class="absolute inset-0 bg-gradient-to-t from-sacred-950 via-sacred-950/60 to-sacred-950/30"></div>
+    </div>
+    
+    <!-- Content -->
+    <div class="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+      <!-- Breadcrumb -->
+      <nav class="mb-8 opacity-0 animate-fade-up" style="animation-fill-mode: forwards;">
+        <ol class="flex items-center gap-2 text-sm">
+          <li>
+            <a href={base} class="text-sacred-400 hover:text-gold-400 transition-colors">Home</a>
+          </li>
+          <li class="text-sacred-600">/</li>
+          <li>
+            <a href={`${base}sites`} class="text-sacred-400 hover:text-gold-400 transition-colors">Sites</a>
+          </li>
+          <li class="text-sacred-600">/</li>
+          <li>
+            <a href={`${base}regions/${site.data.region}`} class={`hover:text-gold-400 transition-colors ${regionColors[site.data.region]}`}>
+              {formatRegion(site.data.region)}
+            </a>
+          </li>
+        </ol>
+      </nav>
+      
+      <!-- Title block -->
+      <div class="max-w-4xl">
+        <div class="flex items-center gap-4 mb-4 opacity-0 animate-fade-up stagger-1" style="animation-fill-mode: forwards;">
+          <span class="region-badge">
+            {formatRegion(site.data.region)}
+          </span>
+          
+          <!-- Significance -->
+          <div class="flex gap-1">
+            {[...Array(5)].map((_, i) => (
+              <div class={`w-2 h-2 rounded-full ${i < site.data.significance ? 'bg-gold-400' : 'bg-sacred-600'}`} />
+            ))}
+          </div>
+        </div>
+        
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl text-gold-100 glow-text mb-3 opacity-0 animate-fade-up stagger-2" style="animation-fill-mode: forwards;">
+          {site.data.title}
+        </h1>
+        
+        {site.data.titleTibetan && (
+          <p class="font-tibetan text-2xl md:text-3xl text-gold-500/60 mb-2 opacity-0 animate-fade-up stagger-3" style="animation-fill-mode: forwards;">
+            {site.data.titleTibetan}
+          </p>
+        )}
+        
+        {site.data.titleWylie && (
+          <p class="text-sm text-sacred-400 italic opacity-0 animate-fade-up stagger-3" style="animation-fill-mode: forwards;">
+            ({site.data.titleWylie})
+          </p>
+        )}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Main content -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      
+      <!-- Main article -->
+      <article class="lg:col-span-2">
+        <!-- Introduction -->
+        <div class="mb-12 p-8 rounded-2xl bg-sacred-900/50 border border-sacred-700/30">
+          <p class="text-lg text-sacred-200 leading-relaxed">
+            {site.data.description}
+          </p>
+        </div>
+        
+        <!-- Main content from MDX -->
+        <div class="prose-sacred">
+          <Content />
+        </div>
+        
+        <!-- Associated Figures -->
+        {site.data.associatedFigures && site.data.associatedFigures.length > 0 && (
+          <section class="mt-16">
+            <h2 class="font-display text-2xl text-gold-100 mb-6">Associated Masters</h2>
+            <div class="flex flex-wrap gap-3">
+              {site.data.associatedFigures.map(figure => (
+                <span class="px-4 py-2 text-sm bg-sacred-800/50 text-sacred-300 rounded-lg border border-sacred-700/30">
+                  {figure}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+        
+        <!-- Associated Deities -->
+        {site.data.associatedDeities && site.data.associatedDeities.length > 0 && (
+          <section class="mt-12">
+            <h2 class="font-display text-2xl text-gold-100 mb-6">Principal Deities</h2>
+            <div class="flex flex-wrap gap-3">
+              {site.data.associatedDeities.map(deity => (
+                <span class="px-4 py-2 text-sm bg-gold-600/10 text-gold-400 rounded-lg border border-gold-600/20">
+                  {deity}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+        
+        <!-- Festivals -->
+        {site.data.festivals && site.data.festivals.length > 0 && (
+          <section class="mt-12">
+            <h2 class="font-display text-2xl text-gold-100 mb-6">Sacred Festivals</h2>
+            <div class="space-y-4">
+              {site.data.festivals.map(festival => (
+                <div class="p-6 bg-sacred-900/50 rounded-xl border border-sacred-700/30">
+                  <div class="flex items-start justify-between mb-2">
+                    <h3 class="font-display text-lg text-gold-200">{festival.name}</h3>
+                    <span class="text-sm text-gold-500">{festival.timing}</span>
+                  </div>
+                  {festival.description && (
+                    <p class="text-sacred-400 text-sm">{festival.description}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+        
+        <!-- Recommended Practices -->
+        {site.data.practicesRecommended && site.data.practicesRecommended.length > 0 && (
+          <section class="mt-12">
+            <h2 class="font-display text-2xl text-gold-100 mb-6">Recommended Practices</h2>
+            <ul class="space-y-3">
+              {site.data.practicesRecommended.map(practice => (
+                <li class="flex items-start gap-3 text-sacred-300">
+                  <span class="text-gold-500 mt-1">༔</span>
+                  {practice}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </article>
+      
+      <!-- Sidebar -->
+      <aside class="lg:col-span-1">
+        <div class="sticky top-24 space-y-8">
+          
+          <!-- Quick Info Card -->
+          <div class="p-6 rounded-2xl bg-sacred-900/50 border border-sacred-700/30">
+            <h3 class="font-display text-lg text-gold-100 mb-6">Quick Information</h3>
+            
+            <dl class="space-y-4">
+              {site.data.elevation && (
+                <div>
+                  <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Elevation</dt>
+                  <dd class="text-sacred-200">{site.data.elevation}</dd>
+                </div>
+              )}
+              
+              {site.data.founded && (
+                <div>
+                  <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Founded</dt>
+                  <dd class="text-sacred-200">{site.data.founded}</dd>
+                </div>
+              )}
+              
+              {site.data.founder && (
+                <div>
+                  <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Founder</dt>
+                  <dd class="text-sacred-200">{site.data.founder}</dd>
+                </div>
+              )}
+              
+              {site.data.lineage && site.data.lineage.length > 0 && (
+                <div>
+                  <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Lineage</dt>
+                  <dd class="text-sacred-200">{site.data.lineage.join(', ')}</dd>
+                </div>
+              )}
+              
+              {site.data.coordinates && (
+                <div>
+                  <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Coordinates</dt>
+                  <dd class="text-sacred-200 text-sm font-mono">
+                    {site.data.coordinates.lat.toFixed(4)}°N, {site.data.coordinates.lng.toFixed(4)}°E
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </div>
+          
+          <!-- Access Information -->
+          {site.data.accessInfo && (
+            <div class="p-6 rounded-2xl bg-sacred-900/50 border border-sacred-700/30">
+              <h3 class="font-display text-lg text-gold-100 mb-6">Visitor Information</h3>
+              
+              <dl class="space-y-4">
+                {site.data.accessInfo.bestSeason && (
+                  <div>
+                    <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Best Season</dt>
+                    <dd class="text-sacred-200">{site.data.accessInfo.bestSeason}</dd>
+                  </div>
+                )}
+                
+                {site.data.accessInfo.difficulty && (
+                  <div>
+                    <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Difficulty</dt>
+                    <dd class="text-sacred-200 capitalize">{site.data.accessInfo.difficulty}</dd>
+                  </div>
+                )}
+                
+                {site.data.accessInfo.nearestTown && (
+                  <div>
+                    <dt class="text-xs uppercase tracking-wider text-sacred-500 mb-1">Nearest Town</dt>
+                    <dd class="text-sacred-200">{site.data.accessInfo.nearestTown}</dd>
+                  </div>
+                )}
+                
+                {site.data.accessInfo.permitRequired && (
+                  <div class="pt-4 border-t border-sacred-700/30">
+                    <span class="inline-flex items-center gap-2 text-sm text-robe-400">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      Permit Required
+                    </span>
+                  </div>
+                )}
+              </dl>
+            </div>
+          )}
+          
+          <!-- Sacred Relics -->
+          {site.data.relics && site.data.relics.length > 0 && (
+            <div class="p-6 rounded-2xl bg-gold-600/5 border border-gold-600/20">
+              <h3 class="font-display text-lg text-gold-100 mb-4">Sacred Relics</h3>
+              <ul class="space-y-2">
+                {site.data.relics.map(relic => (
+                  <li class="flex items-start gap-2 text-sm text-gold-300">
+                    <span class="text-gold-500">•</span>
+                    {relic}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          <!-- Related Sites -->
+          {site.data.relatedSites && site.data.relatedSites.length > 0 && (
+            <div class="p-6 rounded-2xl bg-sacred-900/50 border border-sacred-700/30">
+              <h3 class="font-display text-lg text-gold-100 mb-4">Related Sites</h3>
+              <ul class="space-y-2">
+                {site.data.relatedSites.map(relatedSlug => (
+                  <li>
+                    <a 
+                      href={`${base}sites/${relatedSlug}`}
+                      class="text-sacred-300 hover:text-gold-400 transition-colors text-sm"
+                    >
+                      → {relatedSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+        </div>
+      </aside>
+      
+    </div>
+  </div>
+  
+  <!-- Back to sites link -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+    <div class="sacred-divider">
+      <span class="tibetan-ornament">༔</span>
+    </div>
+    <div class="text-center mt-8">
+      <a href={`${base}sites`} class="btn-secondary">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        Back to All Sites
+      </a>
+    </div>
+  </div>
+</BaseLayout>

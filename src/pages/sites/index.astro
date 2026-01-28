@@ -1,0 +1,136 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import SiteCard from '@/components/SiteCard.astro';
+import { getCollection } from 'astro:content';
+
+// Fetch all sites from the collection
+const allSitesRaw = await getCollection('sites');
+
+// Group sites by region
+const sitesByRegion = allSitesRaw.reduce((acc, site) => {
+  const region = site.data.region;
+  if (!acc[region]) {
+    acc[region] = [];
+  }
+  acc[region].push(site);
+  return acc;
+}, {} as Record<string, typeof allSitesRaw>);
+
+// Sort each region's sites by significance (highest first), then by title
+Object.keys(sitesByRegion).forEach(region => {
+  sitesByRegion[region].sort((a, b) => {
+    if (b.data.significance !== a.data.significance) {
+      return (b.data.significance || 3) - (a.data.significance || 3);
+    }
+    return a.data.title.localeCompare(b.data.title);
+  });
+});
+
+// Define region order
+const regionOrder = ['tibet', 'nepal', 'india', 'bhutan', 'sikkim'];
+const orderedRegions = regionOrder.filter(r => sitesByRegion[r]?.length > 0);
+
+const totalSites = allSitesRaw.length;
+---
+
+<BaseLayout 
+  title="All Sacred Sites"
+  description="Explore Vajrayana Buddhist pilgrimage sites (né) across Tibet, Nepal, India, and Bhutan"
+>
+  <Hero 
+    title="Sacred Sites"
+    titleTibetan="གནས་ཆེན"
+    subtitle="Power Places of Vajrayana"
+    description={`${totalSites} sites where Padmasambhava, Yeshe Tsogyal, and the Mahasiddhas achieved realization — places where their blessing remains accessible.`}
+    size="large"
+    showScroll={true}
+  />
+  
+  <div id="content" class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Filter tabs -->
+      <div class="flex flex-wrap justify-center gap-2 mb-16">
+        <button 
+          class="region-filter active px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 bg-gold-600/20 text-gold-400 border border-gold-600/30"
+          data-region="all"
+        >
+          All Regions
+        </button>
+        {orderedRegions.map(region => (
+          <button 
+            class="region-filter px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 text-sacred-400 border border-sacred-700/30 hover:border-gold-600/30 hover:text-gold-400"
+            data-region={region}
+          >
+            {region.charAt(0).toUpperCase() + region.slice(1)}
+          </button>
+        ))}
+      </div>
+      
+      <!-- Sites by Region -->
+      {orderedRegions.map(regionKey => {
+        const sites = sitesByRegion[regionKey];
+        return (
+          <section class="mb-20 region-section" data-region={regionKey}>
+            <div class="flex items-center gap-4 mb-8">
+              <h2 class="font-display text-2xl md:text-3xl text-gold-100 capitalize">
+                {regionKey}
+              </h2>
+              <div class="flex-1 h-px bg-gradient-to-r from-gold-600/30 to-transparent"></div>
+              <span class="text-sm text-sacred-500">{sites.length} sites</span>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {sites.map((site, index) => (
+                <div class="animate-on-scroll" style={`animation-delay: ${index * 0.05}s`}>
+                  <SiteCard 
+                    title={site.data.title}
+                    titleTibetan={site.data.titleTibetan}
+                    slug={site.slug}
+                    region={site.data.region}
+                    description={site.data.description}
+                    image={site.data.image}
+                    significance={site.data.significance}
+                    associatedFigures={site.data.associatedFigures}
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+      
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  // Region filtering
+  const filterButtons = document.querySelectorAll('.region-filter');
+  const regionSections = document.querySelectorAll('.region-section');
+  
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const region = button.getAttribute('data-region');
+      
+      // Update active state
+      filterButtons.forEach(btn => {
+        btn.classList.remove('active', 'bg-gold-600/20', 'text-gold-400', 'border-gold-600/30');
+        btn.classList.add('text-sacred-400', 'border-sacred-700/30');
+      });
+      button.classList.add('active', 'bg-gold-600/20', 'text-gold-400', 'border-gold-600/30');
+      button.classList.remove('text-sacred-400', 'border-sacred-700/30');
+      
+      // Show/hide sections
+      regionSections.forEach(section => {
+        const sectionRegion = section.getAttribute('data-region');
+        if (region === 'all' || sectionRegion === region) {
+          (section as HTMLElement).style.display = 'block';
+        } else {
+          (section as HTMLElement).style.display = 'none';
+        }
+      });
+    });
+  });
+</script>

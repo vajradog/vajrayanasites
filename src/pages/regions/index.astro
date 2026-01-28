@@ -1,0 +1,132 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const regions = [
+  { 
+    name: 'Tibet',
+    slug: 'tibet',
+    tibetan: 'བོད',
+    description: 'Where Padmasambhava established Vajrayana Buddhism, Milarepa won his legendary tantric contest, and Yeshe Tsogyal achieved rainbow body. The heartland of tantric accomplishment.',
+    sites: 6,
+    highlights: ['Mount Kailash', 'Samye', 'Chimpu', 'Drak Yerpa', 'Tidrum'],
+    color: 'from-robe-600/30 to-robe-800/30',
+    borderColor: 'border-robe-600/30'
+  },
+  { 
+    name: 'Nepal',
+    slug: 'nepal',
+    tibetan: 'བལ་ཡུལ',
+    description: 'The caves where Padmasambhava attained Mahamudra Vidyadhara and achieved immortality with Mandarava. The crucible of his supreme accomplishments.',
+    sites: 3,
+    highlights: ['Pharping', 'Maratika', 'Muktinath'],
+    color: 'from-turquoise-500/30 to-turquoise-700/30',
+    borderColor: 'border-turquoise-500/30'
+  },
+  { 
+    name: 'India',
+    slug: 'india',
+    tibetan: 'རྒྱ་གར',
+    description: 'The Lotus Lake of Padmasambhava\'s miracles and the hidden beyul of Sikkim — prophesied by Guru Rinpoche as a sanctuary with the liberation-through-seeing stupa.',
+    sites: 3,
+    highlights: ['Rewalsar (Tso Pema)', 'Tashiding', 'Pemayangtse'],
+    color: 'from-gold-600/30 to-gold-800/30',
+    borderColor: 'border-gold-600/30'
+  },
+  { 
+    name: 'Bhutan',
+    slug: 'bhutan',
+    tibetan: 'འབྲུག་ཡུལ',
+    description: 'Tiger\'s Nest where Padmasambhava arrived on a tigress, and Kurje where his body imprint remains pressed into rock. Tangible evidence of the master\'s presence.',
+    sites: 2,
+    highlights: ['Taktsang', 'Kurje Lhakhang'],
+    color: 'from-sky-500/30 to-sky-700/30',
+    borderColor: 'border-sky-500/30'
+  },
+];
+---
+
+<BaseLayout 
+  title="Regions"
+  description="Explore Vajrayana Buddhist pilgrimage sites by region: Tibet, Nepal, India, and Bhutan"
+>
+  <Hero 
+    title="Sacred Regions"
+    titleTibetan="ཡུལ་གྲུ"
+    subtitle="Lands of Accomplishment"
+    description="Four regions where Padmasambhava, Yeshe Tsogyal, and the Mahasiddhas achieved realization. Each carries the blessing of tantric accomplishment."
+    size="large"
+    showScroll={true}
+  />
+  
+  <div id="content" class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      
+      <!-- Region Cards -->
+      <div class="space-y-12">
+        {regions.map((region, index) => (
+          <a 
+            href={`${base}regions/${region.slug}`}
+            class={`group block relative overflow-hidden rounded-3xl border ${region.borderColor} hover:border-gold-600/50 transition-all duration-500`}
+          >
+            <!-- Background gradient -->
+            <div class={`absolute inset-0 bg-gradient-to-br ${region.color} opacity-50 group-hover:opacity-70 transition-opacity duration-500`}></div>
+            
+            <div class="relative p-8 md:p-12 lg:p-16">
+              <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+                
+                <!-- Left content -->
+                <div class="flex-1">
+                  <div class="flex items-baseline gap-4 mb-4">
+                    <h2 class="font-display text-4xl md:text-5xl text-gold-100 group-hover:text-gold-300 transition-colors">
+                      {region.name}
+                    </h2>
+                    <span class="font-tibetan text-2xl text-gold-500/50">
+                      {region.tibetan}
+                    </span>
+                  </div>
+                  
+                  <p class="text-lg text-sacred-300 leading-relaxed max-w-2xl mb-6">
+                    {region.description}
+                  </p>
+                  
+                  <!-- Highlights -->
+                  <div class="flex flex-wrap gap-2 mb-6">
+                    {region.highlights.map(site => (
+                      <span class="px-3 py-1 text-sm bg-sacred-800/50 text-sacred-300 rounded-full">
+                        {site}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <div class="flex items-center gap-2 text-gold-500">
+                    <span class="text-sm font-medium">{region.sites} sacred sites</span>
+                    <svg 
+                      class="w-5 h-5 transform group-hover:translate-x-2 transition-transform duration-300" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
+                </div>
+                
+                <!-- Right decorative element -->
+                <div class="hidden lg:block">
+                  <div class="w-32 h-32 rounded-full bg-gradient-radial from-gold-500/10 to-transparent flex items-center justify-center">
+                    <span class="font-tibetan text-5xl text-gold-500/30">{region.tibetan.charAt(0)}</span>
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          </a>
+        ))}
+      </div>
+      
+    </div>
+  </div>
+</BaseLayout>

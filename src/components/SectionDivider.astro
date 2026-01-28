@@ -1,0 +1,12 @@
+---
+interface Props {
+  symbol?: string;
+  className?: string;
+}
+
+const { symbol = '༔', className = '' } = Astro.props;
+---
+
+<div class={`sacred-divider ${className}`}>
+  <span class="tibetan-ornament">{symbol}</span>
+</div>

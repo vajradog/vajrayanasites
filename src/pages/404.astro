@@ -1,0 +1,46 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Page Not Found">
+  <div class="min-h-[70vh] flex items-center justify-center px-4">
+    <div class="text-center">
+      <!-- Decorative element -->
+      <div class="mb-8">
+        <svg class="w-24 h-24 mx-auto text-gold-500/30" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="30" stroke="currentColor" stroke-width="1" />
+          <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="1" />
+          <circle cx="32" cy="32" r="10" stroke="currentColor" stroke-width="1" />
+          <path d="M32 2 L32 14 M32 50 L32 62 M2 32 L14 32 M50 32 L62 32" stroke="currentColor" stroke-width="1" />
+        </svg>
+      </div>
+      
+      <p class="text-gold-500 text-sm uppercase tracking-[0.2em] mb-4">
+        Path Not Found
+      </p>
+      
+      <h1 class="font-display text-5xl md:text-6xl text-gold-100 mb-6">
+        404
+      </h1>
+      
+      <p class="font-tibetan text-2xl text-gold-500/50 mb-8">
+        ལམ་མ་རྙེད
+      </p>
+      
+      <p class="text-lg text-sacred-300 max-w-md mx-auto mb-10">
+        The path you seek does not exist here. Perhaps the journey itself is the destination.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href={base} class="btn-primary">
+          Return Home
+        </a>
+        <a href={`${base}sites`} class="btn-secondary">
+          Explore Sacred Sites
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

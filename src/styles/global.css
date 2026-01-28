@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+Tibetan:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --gold-glow: rgba(212, 160, 23, 0.15);
+    --sacred-dark: #0f0e0d;
+    --sacred-text: #d6d3d1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-sacred-950 text-sacred-200 font-body;
+    background-image: 
+      radial-gradient(ellipse at top, rgba(212, 160, 23, 0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, rgba(139, 92, 29, 0.02) 0%, transparent 50%);
+    min-height: 100vh;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-sacred-900;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gold-700/50 rounded-full;
+    border: 2px solid transparent;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gold-600/70;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-gold-600/30 text-gold-100;
+  }
+
+  /* Typography base */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-medium tracking-tight text-gold-100;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  p {
+    @apply leading-relaxed;
+  }
+
+  a {
+    @apply transition-colors duration-300;
+  }
+}
+
+@layer components {
+  /* Grain overlay effect */
+  .grain-overlay {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    right: -50%;
+    bottom: -50%;
+    width: 200%;
+    height: 200%;
+    background: transparent url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+    animation: grain 8s steps(10) infinite;
+  }
+
+  /* Glow effects */
+  .glow-text {
+    text-shadow: 0 0 40px rgba(212, 160, 23, 0.3);
+  }
+
+  .glow-border {
+    box-shadow: 
+      0 0 0 1px rgba(212, 160, 23, 0.1),
+      0 0 30px -10px rgba(212, 160, 23, 0.2);
+  }
+
+  /* Sacred divider */
+  .sacred-divider {
+    @apply relative flex items-center justify-center my-12;
+  }
+
+  .sacred-divider::before,
+  .sacred-divider::after {
+    content: '';
+    @apply flex-1 h-px bg-gradient-to-r;
+  }
+
+  .sacred-divider::before {
+    @apply from-transparent via-gold-600/30 to-gold-600/50;
+  }
+
+  .sacred-divider::after {
+    @apply from-gold-600/50 via-gold-600/30 to-transparent;
+  }
+
+  .sacred-divider span {
+    @apply px-6 text-gold-500;
+  }
+
+  /* Card styles */
+  .site-card {
+    @apply relative overflow-hidden rounded-2xl bg-sacred-900/50 border border-sacred-700/30;
+    @apply transition-all duration-500 ease-out;
+    @apply hover:border-gold-600/30 hover:shadow-glow;
+  }
+
+  .site-card::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-b from-gold-500/5 to-transparent opacity-0;
+    @apply transition-opacity duration-500;
+  }
+
+  .site-card:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Hero section */
+  .hero-gradient {
+    background: 
+      linear-gradient(180deg, transparent 0%, rgba(15, 14, 13, 0.3) 30%, rgba(15, 14, 13, 0.8) 70%, rgba(15, 14, 13, 1) 100%);
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3;
+    @apply bg-gold-600 text-sacred-950 font-medium rounded-lg;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:bg-gold-500 hover:shadow-glow;
+    @apply focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 focus:ring-offset-sacred-950;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-6 py-3;
+    @apply bg-transparent text-gold-400 font-medium rounded-lg;
+    @apply border border-gold-600/50;
+    @apply transition-all duration-300 ease-out;
+    @apply hover:bg-gold-600/10 hover:border-gold-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-gold-500 focus:ring-offset-2 focus:ring-offset-sacred-950;
+  }
+
+  /* Navigation */
+  .nav-link {
+    @apply relative text-sacred-300 transition-colors duration-300;
+    @apply hover:text-gold-400;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gold-500;
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    @apply w-full;
+  }
+
+  /* Tibetan ornament */
+  .tibetan-ornament {
+    @apply text-gold-600/60 text-2xl;
+  }
+
+  /* Prose styling for content */
+  .prose-sacred {
+    @apply text-sacred-200 leading-relaxed;
+  }
+
+  .prose-sacred h1,
+  .prose-sacred h2,
+  .prose-sacred h3,
+  .prose-sacred h4 {
+    @apply text-gold-100 font-display mt-12 mb-6 first:mt-0;
+  }
+
+  .prose-sacred p {
+    @apply mb-6;
+  }
+
+  .prose-sacred a {
+    @apply text-gold-400 hover:text-gold-300 underline underline-offset-4 decoration-gold-600/30;
+    @apply hover:decoration-gold-500/50;
+  }
+
+  .prose-sacred blockquote {
+    @apply border-l-2 border-gold-600/50 pl-6 my-8 italic text-sacred-300;
+  }
+
+  .prose-sacred ul,
+  .prose-sacred ol {
+    @apply my-6 space-y-2 pl-6;
+  }
+
+  .prose-sacred ul {
+    @apply list-disc;
+  }
+
+  .prose-sacred ol {
+    @apply list-decimal;
+  }
+
+  .prose-sacred li {
+    @apply text-sacred-300;
+  }
+
+  .prose-sacred strong {
+    @apply text-gold-200 font-semibold;
+  }
+
+  .prose-sacred hr {
+    @apply my-12 border-sacred-700/50;
+  }
+
+  /* Region badge */
+  .region-badge {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium uppercase tracking-wider;
+    @apply rounded-full bg-gold-600/10 text-gold-400 border border-gold-600/20;
+  }
+
+  /* Significance level indicator */
+  .significance-bar {
+    @apply h-1 rounded-full bg-sacred-700;
+  }
+
+  .significance-fill {
+    @apply h-full rounded-full bg-gradient-to-r from-gold-600 to-gold-400;
+    @apply transition-all duration-1000 ease-out;
+  }
+
+  /* Image treatments */
+  .image-sacred {
+    @apply relative overflow-hidden rounded-xl;
+  }
+
+  .image-sacred::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-t from-sacred-950/60 via-transparent to-transparent;
+    @apply pointer-events-none;
+  }
+
+  /* Floating elements */
+  .float-element {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* Stagger animations */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+  .stagger-6 { animation-delay: 0.6s; }
+
+  /* Page transitions */
+  .page-enter {
+    @apply opacity-0 translate-y-4;
+  }
+
+  .page-enter-active {
+    @apply opacity-100 translate-y-0 transition-all duration-500 ease-out;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold-200 via-gold-400 to-gold-200;
+  }
+
+  .mask-fade-bottom {
+    mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  }
+
+  .mask-fade-top {
+    mask-image: linear-gradient(to top, black 60%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to top, black 60%, transparent 100%);
+  }
+}

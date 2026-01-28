@@ -1,0 +1,136 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+const base = import.meta.env.BASE_URL;
+
+interface Props {
+  title: string;
+  titleTibetan?: string;
+  slug: string;
+  region: string;
+  description: string;
+  image?: ImageMetadata;
+  significance?: number;
+  associatedFigures?: string[];
+}
+
+const { 
+  title, 
+  titleTibetan, 
+  slug, 
+  region, 
+  description, 
+  image,
+  significance = 3,
+  associatedFigures = []
+} = Astro.props;
+
+const regionColors: Record<string, string> = {
+  tibet: 'bg-robe-600/20 text-robe-400 border-robe-600/30',
+  nepal: 'bg-turquoise-500/20 text-turquoise-400 border-turquoise-500/30',
+  india: 'bg-gold-600/20 text-gold-400 border-gold-600/30',
+  bhutan: 'bg-sky-500/20 text-sky-400 border-sky-500/30',
+  sikkim: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
+};
+
+const regionColor = regionColors[region.toLowerCase()] || regionColors.tibet;
+const placeholderUrl = `${base}images/placeholder.svg`;
+---
+
+<article class="site-card group">
+  <a href={`${base}sites/${slug}`} class="block">
+    <!-- Image container -->
+    <div class="relative aspect-[4/3] overflow-hidden">
+      {image ? (
+        <Image 
+          src={image} 
+          alt={title}
+          loading="lazy"
+          decoding="async"
+          widths={[320, 480, 640]}
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+      ) : (
+        <img 
+          src={placeholderUrl} 
+          alt={title}
+          loading="lazy"
+          decoding="async"
+          class="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+        />
+      )}
+      <!-- Gradient overlay -->
+      <div class="absolute inset-0 bg-gradient-to-t from-sacred-950 via-sacred-950/30 to-transparent"></div>
+      
+      <!-- Region badge -->
+      <div class="absolute top-4 left-4">
+        <span class={`inline-flex items-center px-3 py-1 text-xs font-medium uppercase tracking-wider rounded-full border ${regionColor}`}>
+          {region}
+        </span>
+      </div>
+      
+      <!-- Significance indicator -->
+      <div class="absolute top-4 right-4 flex gap-1">
+        {[...Array(5)].map((_, i) => (
+          <div 
+            class={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i < significance ? 'bg-gold-400' : 'bg-sacred-600'}`}
+          />
+        ))}
+      </div>
+    </div>
+    
+    <!-- Content -->
+    <div class="p-6">
+      <!-- Title -->
+      <h3 class="font-display text-xl font-medium text-gold-100 mb-1 group-hover:text-gold-300 transition-colors duration-300">
+        {title}
+      </h3>
+      
+      {titleTibetan && (
+        <p class="font-tibetan text-sm text-gold-500/60 mb-3">
+          {titleTibetan}
+        </p>
+      )}
+      
+      <!-- Description -->
+      <p class="text-sacred-400 text-sm leading-relaxed line-clamp-3 mb-4">
+        {description}
+      </p>
+      
+      <!-- Associated figures -->
+      {associatedFigures.length > 0 && (
+        <div class="flex flex-wrap gap-2">
+          {associatedFigures.slice(0, 3).map(figure => (
+            <span class="text-xs text-sacred-500 bg-sacred-800/50 px-2 py-1 rounded">
+              {figure}
+            </span>
+          ))}
+        </div>
+      )}
+      
+      <!-- Read more link -->
+      <div class="mt-4 flex items-center gap-2 text-gold-500 text-sm font-medium group/link">
+        <span class="transition-all duration-300 group-hover/link:mr-2">Explore site</span>
+        <svg 
+          class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </div>
+    </div>
+  </a>
+</article>
+
+<style>
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

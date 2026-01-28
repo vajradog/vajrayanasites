@@ -1,0 +1,293 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+
+const base = import.meta.env.BASE_URL;
+
+const glossaryTerms = [
+  {
+    term: "Beyul",
+    tibetan: "སྦས་ཡུལ",
+    wylie: "sbas yul",
+    definition: "Hidden valley or sacred hidden land prophesied by Padmasambhava as refuges that would open during times of strife. Sikkim (Beyul Demojong) is one such hidden valley."
+  },
+  {
+    term: "Bön",
+    tibetan: "བོན",
+    wylie: "bon",
+    definition: "The indigenous spiritual tradition of Tibet, predating Buddhism and still practiced today. Bön practitioners circumambulate sacred sites counter-clockwise."
+  },
+  {
+    term: "Bodhichitta",
+    tibetan: "བྱང་ཆུབ་ཀྱི་སེམས",
+    wylie: "byang chub kyi sems",
+    definition: "The awakening mind; the altruistic aspiration to achieve enlightenment for the benefit of all sentient beings."
+  },
+  {
+    term: "Chakrasamvara",
+    tibetan: "འཁོར་ལོ་བདེ་མཆོག",
+    wylie: "'khor lo bde mchog",
+    definition: "A principal meditational deity (yidam) of the highest yoga tantra, associated with Mount Kailash."
+  },
+  {
+    term: "Cham",
+    tibetan: "འཆམ",
+    wylie: "'cham",
+    definition: "Sacred masked dance performed at festivals, depicting enlightened beings, protectors, and the triumph of dharma over ignorance."
+  },
+  {
+    term: "Chörten / Stupa",
+    tibetan: "མཆོད་རྟེན",
+    wylie: "mchod rten",
+    definition: "A sacred monument containing relics, representing the enlightened mind of the Buddha. Circumambulating stupas accumulates merit."
+  },
+  {
+    term: "Dakini",
+    tibetan: "མཁའ་འགྲོ་མ",
+    wylie: "mkha' 'gro ma",
+    definition: "Sky-goer; a class of female enlightened beings who embody wisdom energy. Yeshe Tsogyal is the most famous Tibetan dakini."
+  },
+  {
+    term: "Dharma",
+    tibetan: "ཆོས",
+    wylie: "chos",
+    definition: "The Buddha's teachings; the path to liberation; the truth of how things are."
+  },
+  {
+    term: "Dzong",
+    tibetan: "རྫོང",
+    wylie: "rdzong",
+    definition: "Fortress-monastery characteristic of Bhutan, serving both administrative and religious functions."
+  },
+  {
+    term: "Empowerment / Wang",
+    tibetan: "དབང",
+    wylie: "dbang",
+    definition: "Ritual transmission authorizing a practitioner to engage in a specific tantric practice. Required before practicing with certain deities."
+  },
+  {
+    term: "Guru Rinpoche",
+    tibetan: "གུ་རུ་རིན་པོ་ཆེ",
+    wylie: "gu ru rin po che",
+    definition: "\"Precious Master\" — the most common Tibetan name for Padmasambhava, the tantric master who established Buddhism in Tibet."
+  },
+  {
+    term: "Jowo Rinpoche",
+    tibetan: "ཇོ་བོ་རིན་པོ་ཆེ",
+    wylie: "jo bo rin po che",
+    definition: "\"Precious Lord\" — the most sacred Buddha statue in Tibet, housed in the Jokhang Temple in Lhasa."
+  },
+  {
+    term: "Karma Kagyu",
+    tibetan: "ཀརྨ་བཀའ་བརྒྱུད",
+    wylie: "karma bka' brgyud",
+    definition: "One of the four main schools of Tibetan Buddhism, headed by the Karmapa. Known for its emphasis on meditation practice."
+  },
+  {
+    term: "Katak / Khata",
+    tibetan: "ཁ་བཏགས",
+    wylie: "kha btags",
+    definition: "White silk scarf offered as a sign of respect and pure intention."
+  },
+  {
+    term: "Kora",
+    tibetan: "སྐོར་བ",
+    wylie: "skor ba",
+    definition: "Circumambulation; the practice of walking clockwise around a sacred object, site, or person."
+  },
+  {
+    term: "Lama",
+    tibetan: "བླ་མ",
+    wylie: "bla ma",
+    definition: "Spiritual teacher; one who guides students on the path. Equivalent to Sanskrit \"guru.\""
+  },
+  {
+    term: "Mahamudra",
+    tibetan: "ཕྱག་རྒྱ་ཆེན་པོ",
+    wylie: "phyag rgya chen po",
+    definition: "\"Great Seal\" — the ultimate nature of mind; also a meditation system for recognizing this nature."
+  },
+  {
+    term: "Mandala",
+    tibetan: "དཀྱིལ་འཁོར",
+    wylie: "dkyil 'khor",
+    definition: "Sacred diagram representing the palace of a deity and the enlightened universe; also used as an offering practice."
+  },
+  {
+    term: "Mani",
+    tibetan: "མ་ཎི",
+    wylie: "ma Ni",
+    definition: "Short for Om Mani Padme Hum, the mantra of Avalokiteshvara. \"Mani stones\" are rocks inscribed with this mantra."
+  },
+  {
+    term: "Merit",
+    tibetan: "བསོད་ནམས",
+    wylie: "bsod nams",
+    definition: "Positive karma accumulated through virtuous actions, which creates conditions for happiness and spiritual progress."
+  },
+  {
+    term: "Né",
+    tibetan: "གནས",
+    wylie: "gnas",
+    definition: "Power place; a sacred site blessed by the practice of realized masters."
+  },
+  {
+    term: "Nyingma",
+    tibetan: "རྙིང་མ",
+    wylie: "rnying ma",
+    definition: "The oldest school of Tibetan Buddhism, tracing its origins to Padmasambhava and the first transmission of teachings to Tibet."
+  },
+  {
+    term: "Padmasambhava",
+    tibetan: "པདྨ་འབྱུང་གནས",
+    wylie: "pad+ma 'byung gnas",
+    definition: "The \"Lotus-Born\" tantric master from Oddiyana who established Buddhism in Tibet in the 8th century. Also known as Guru Rinpoche."
+  },
+  {
+    term: "Prostration",
+    tibetan: "ཕྱག་འཚལ",
+    wylie: "phyag 'tshal",
+    definition: "Physical expression of devotion involving touching the body to the ground; a powerful purification practice."
+  },
+  {
+    term: "Rinpoche",
+    tibetan: "རིན་པོ་ཆེ",
+    wylie: "rin po che",
+    definition: "\"Precious one\" — honorific title for highly respected teachers, often (but not always) recognized reincarnations."
+  },
+  {
+    term: "Saga Dawa",
+    tibetan: "ས་ག་ཟླ་བ",
+    wylie: "sa ga zla ba",
+    definition: "The fourth month of the Tibetan calendar, considered the most sacred month, encompassing Buddha's birth, enlightenment, and parinirvana."
+  },
+  {
+    term: "Terma",
+    tibetan: "གཏེར་མ",
+    wylie: "gter ma",
+    definition: "Hidden treasure teachings concealed by Padmasambhava and others, to be revealed by tertöns when the time is right."
+  },
+  {
+    term: "Tertön",
+    tibetan: "གཏེར་སྟོན",
+    wylie: "gter ston",
+    definition: "Treasure revealer; one who discovers hidden terma teachings."
+  },
+  {
+    term: "Tsongkhapa",
+    tibetan: "ཙོང་ཁ་པ",
+    wylie: "tsong kha pa",
+    definition: "Founder of the Gelug school (14th-15th century), known for his emphasis on monastic discipline and systematic study."
+  },
+  {
+    term: "Vajrakilaya",
+    tibetan: "རྡོ་རྗེ་ཕུར་པ",
+    wylie: "rdo rje phur pa",
+    definition: "A wrathful deity whose practice is particularly powerful for removing obstacles. Padmasambhava achieved this practice at Pharping."
+  },
+  {
+    term: "Vajrayana",
+    tibetan: "རྡོ་རྗེ་ཐེག་པ",
+    wylie: "rdo rje theg pa",
+    definition: "The \"Diamond Vehicle\" — the tantric form of Buddhism preserved primarily in Tibet, emphasizing transformation and rapid enlightenment."
+  },
+  {
+    term: "Yeshe Tsogyal",
+    tibetan: "ཡེ་ཤེས་མཚོ་རྒྱལ",
+    wylie: "ye shes mtsho rgyal",
+    definition: "The principal Tibetan consort of Padmasambhava and the first Tibetan woman to achieve enlightenment."
+  },
+  {
+    term: "Yidam",
+    tibetan: "ཡི་དམ",
+    wylie: "yi dam",
+    definition: "Meditational deity; a Buddha form used as the focus of tantric practice, representing one's own enlightened nature."
+  }
+];
+
+// Sort alphabetically
+glossaryTerms.sort((a, b) => a.term.localeCompare(b.term));
+---
+
+<BaseLayout 
+  title="Glossary"
+  description="Glossary of Tibetan Buddhist terms related to pilgrimage and sacred sites"
+>
+  <Hero 
+    title="Glossary"
+    titleTibetan="ཚིག་མཛོད"
+    subtitle="Tibetan Buddhist Terms"
+    description="Key terms and concepts for understanding Vajrayana pilgrimage traditions"
+    size="medium"
+    showScroll={false}
+  />
+  
+  <div class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      
+      <!-- Alphabet navigation -->
+      <nav class="flex flex-wrap justify-center gap-2 mb-12">
+        {[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map(letter => {
+          const hasTerms = glossaryTerms.some(t => t.term[0].toUpperCase() === letter);
+          return hasTerms ? (
+            <a 
+              href={`#letter-${letter}`}
+              class="w-8 h-8 flex items-center justify-center text-sm font-medium rounded bg-sacred-800/50 text-gold-400 hover:bg-gold-600/20 transition-colors"
+            >
+              {letter}
+            </a>
+          ) : (
+            <span class="w-8 h-8 flex items-center justify-center text-sm font-medium text-sacred-600">
+              {letter}
+            </span>
+          );
+        })}
+      </nav>
+      
+      <!-- Glossary entries -->
+      <div class="space-y-6">
+        {glossaryTerms.map((entry, index) => {
+          const firstLetter = entry.term[0].toUpperCase();
+          const isFirstOfLetter = index === 0 || glossaryTerms[index - 1].term[0].toUpperCase() !== firstLetter;
+          
+          return (
+            <>
+              {isFirstOfLetter && (
+                <div id={`letter-${firstLetter}`} class="pt-8 first:pt-0">
+                  <h2 class="font-display text-3xl text-gold-500 mb-6">{firstLetter}</h2>
+                </div>
+              )}
+              <div class="p-6 rounded-xl bg-sacred-900/30 border border-sacred-700/30 hover:border-gold-600/20 transition-colors">
+                <div class="flex flex-wrap items-baseline gap-x-4 gap-y-1 mb-3">
+                  <h3 class="font-display text-xl text-gold-100">
+                    {entry.term}
+                  </h3>
+                  <span class="font-tibetan text-gold-500/60">
+                    {entry.tibetan}
+                  </span>
+                  <span class="text-xs text-sacred-500 italic">
+                    ({entry.wylie})
+                  </span>
+                </div>
+                <p class="text-sacred-300 leading-relaxed">
+                  {entry.definition}
+                </p>
+              </div>
+            </>
+          );
+        })}
+      </div>
+      
+      <!-- Navigation -->
+      <div class="mt-16 pt-8 border-t border-sacred-700/30 flex justify-center gap-4">
+        <a href={`${base}sites`} class="btn-primary">
+          Explore Sacred Sites
+        </a>
+        <a href={`${base}practices`} class="btn-secondary">
+          Pilgrimage Practices
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</BaseLayout>
