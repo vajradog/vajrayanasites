@@ -137,11 +137,40 @@ const onlineResources = [
     description: "Comprehensive digital library of Tibetan texts."
   }
 ];
+
+// Breadcrumbs for schema
+const breadcrumbs = [
+  { name: 'Home', url: base },
+  { name: 'Bibliography', url: `${base}bibliography` },
+];
+
+// Collection items for schema (books as resources)
+const collectionItems = [
+  ...books.map(book => ({
+    name: book.title,
+    url: `${base}bibliography#books`,
+    description: `${book.author} (${book.year}) - ${book.description}`,
+  })),
+  ...academicResources.map(resource => ({
+    name: resource.title,
+    url: `${base}bibliography#academic`,
+    description: `${resource.author} (${resource.year}) - ${resource.description}`,
+  })),
+  ...onlineResources.map(resource => ({
+    name: resource.title,
+    url: resource.url,
+    description: resource.description,
+  })),
+];
 ---
 
 <BaseLayout 
   title="Bibliography"
   description="Recommended reading and resources for understanding Vajrayana Buddhist pilgrimage"
+  type="collection"
+  breadcrumbs={breadcrumbs}
+  collectionName="Vajrayana Pilgrimage Bibliography & Resources"
+  collectionItems={collectionItems}
 >
   <Hero 
     title="Bibliography"

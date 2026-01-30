@@ -116,11 +116,52 @@ const sites = allSites
     }
     return a.data.title.localeCompare(b.data.title);
   });
+
+// Region to country mapping for schema
+const regionCountryMap: Record<string, string> = {
+  tibet: 'China',
+  nepal: 'Nepal',
+  india: 'India',
+  bhutan: 'Bhutan',
+  sikkim: 'India',
+};
+
+// Breadcrumbs for schema
+const breadcrumbs = [
+  { name: 'Home', url: base },
+  { name: 'Regions', url: `${base}regions` },
+  { name: regionData.name, url: `${base}regions/${region}` },
+];
+
+// Collection items for schema
+const collectionItems = sites.map(site => ({
+  name: site.data.title,
+  url: `${base}sites/${site.slug}`,
+  description: site.data.description,
+}));
+
+// Place schema for the region itself
+const placeSchema = {
+  name: `${regionData.name} - Vajrayana Pilgrimage Region`,
+  alternateName: regionData.tibetan,
+  description: regionData.longDescription.substring(0, 500),
+  address: {
+    addressRegion: regionData.name,
+    addressCountry: regionCountryMap[region as string],
+  },
+  touristType: ['Religious tourism', 'Pilgrimage', 'Cultural tourism', 'Buddhist pilgrimage'],
+  additionalType: ['https://schema.org/TouristDestination'],
+};
 ---
 
 <BaseLayout 
   title={regionData.name}
   description={regionData.description}
+  type="collection"
+  breadcrumbs={breadcrumbs}
+  collectionName={`Sacred Sites in ${regionData.name}`}
+  collectionItems={collectionItems}
+  placeSchema={placeSchema}
 >
   <Hero 
     title={regionData.name}

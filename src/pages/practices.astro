@@ -3,11 +3,19 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import Hero from '@/components/Hero.astro';
 
 const base = import.meta.env.BASE_URL;
+
+// Breadcrumbs for schema
+const breadcrumbs = [
+  { name: 'Home', url: base },
+  { name: 'Pilgrimage Practices', url: `${base}practices` },
+];
 ---
 
 <BaseLayout 
   title="Pilgrimage Practices"
   description="Traditional practices for Vajrayana Buddhist pilgrimage — kora, prostrations, offerings, and more"
+  type="article"
+  breadcrumbs={breadcrumbs}
 >
   <Hero 
     title="Pilgrimage Practices"

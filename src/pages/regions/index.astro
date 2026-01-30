@@ -46,11 +46,28 @@ const regions = [
     borderColor: 'border-sky-500/30'
   },
 ];
+
+// Breadcrumbs for schema
+const breadcrumbs = [
+  { name: 'Home', url: base },
+  { name: 'Regions', url: `${base}regions` },
+];
+
+// Collection items for schema
+const collectionItems = regions.map(region => ({
+  name: `${region.name} - ${region.tibetan}`,
+  url: `${base}regions/${region.slug}`,
+  description: region.description,
+}));
 ---
 
 <BaseLayout 
   title="Regions"
   description="Explore Vajrayana Buddhist pilgrimage sites by region: Tibet, Nepal, India, and Bhutan"
+  type="collection"
+  breadcrumbs={breadcrumbs}
+  collectionName="Sacred Vajrayana Buddhist Pilgrimage Regions"
+  collectionItems={collectionItems}
 >
   <Hero 
     title="Sacred Regions"

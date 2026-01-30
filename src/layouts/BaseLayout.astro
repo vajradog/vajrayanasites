@@ -3,13 +3,36 @@ import '@/styles/global.css';
 import Header from '@/components/Header.astro';
 import Footer from '@/components/Footer.astro';
 
+// Schema types for rich structured data
+type PlaceSchema = {
+  name: string;
+  alternateName?: string;
+  description: string;
+  image?: string;
+  geo?: { latitude: number; longitude: number };
+  address?: { addressRegion: string; addressCountry: string };
+  elevation?: string;
+  founder?: string;
+  foundingDate?: string;
+  additionalType?: string[];
+  containedInPlace?: { name: string; type: string };
+  touristType?: string[];
+  amenityFeature?: string[];
+  isAccessibleForFree?: boolean;
+  publicAccess?: boolean;
+};
+
 interface Props {
   title: string;
   description?: string;
   image?: string;
-  type?: 'website' | 'article';
+  type?: 'website' | 'article' | 'place' | 'collection';
   publishedDate?: Date;
   modifiedDate?: Date;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  placeSchema?: PlaceSchema;
+  collectionName?: string;
+  collectionItems?: Array<{ name: string; url: string; description?: string }>;
 }
 
 const base = import.meta.env.BASE_URL;
@@ -21,42 +44,187 @@ const {
   type = 'website',
   publishedDate,
   modifiedDate,
+  breadcrumbs,
+  placeSchema,
+  collectionName,
+  collectionItems,
 } = Astro.props;
 
 const siteName = 'Vajrayana Pilgrimage Sites';
 const siteTitle = title === 'Vajrayana Pilgrimage Sites' ? title : `${title} | Vajrayana Pilgrimage`;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const ogImageURL = image.startsWith('http') ? image : new URL(image, Astro.site).href;
+const siteUrl = Astro.site?.href || 'https://vajrayana-pilgrimage.com/';
 
-// JSON-LD Structured Data
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': type === 'article' ? 'Article' : 'WebSite',
+// Organization Schema - consistent across all pages
+const organizationSchema = {
+  '@type': 'Organization',
+  '@id': `${siteUrl}#organization`,
+  name: siteName,
+  url: siteUrl,
+  logo: {
+    '@type': 'ImageObject',
+    url: new URL('/favicon.svg', Astro.site).href,
+  },
+  description: 'A comprehensive guide to sacred Vajrayana Buddhist pilgrimage sites across the Himalayas, Tibet, Nepal, India, and Bhutan.',
+  sameAs: [],
+  knowsAbout: [
+    'Vajrayana Buddhism',
+    'Tibetan Buddhism',
+    'Buddhist Pilgrimage',
+    'Sacred Sites',
+    'Padmasambhava',
+    'Yeshe Tsogyal',
+    'Himalayan Buddhism',
+  ],
+};
+
+// WebSite Schema with SearchAction
+const websiteSchema = {
+  '@type': 'WebSite',
+  '@id': `${siteUrl}#website`,
+  name: siteName,
+  url: siteUrl,
+  description: 'A comprehensive guide to sacred Vajrayana Buddhist pilgrimage sites across the Himalayas',
+  publisher: { '@id': `${siteUrl}#organization` },
+  inLanguage: 'en-US',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${siteUrl}sites?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+// BreadcrumbList Schema
+const breadcrumbSchema = breadcrumbs && breadcrumbs.length > 0 ? {
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((crumb, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: crumb.name,
+    item: crumb.url.startsWith('http') ? crumb.url : new URL(crumb.url, Astro.site).href,
+  })),
+} : null;
+
+// TouristAttraction/Place Schema for pilgrimage sites
+const placeJsonLd = placeSchema ? {
+  '@type': ['TouristAttraction', 'LandmarksOrHistoricalBuildings', 'Place'],
+  '@id': canonicalURL.href,
+  name: placeSchema.name,
+  alternateName: placeSchema.alternateName,
+  description: placeSchema.description,
+  url: canonicalURL.href,
+  image: placeSchema.image ? (placeSchema.image.startsWith('http') ? placeSchema.image : new URL(placeSchema.image, Astro.site).href) : ogImageURL,
+  ...(placeSchema.geo && {
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: placeSchema.geo.latitude,
+      longitude: placeSchema.geo.longitude,
+      ...(placeSchema.elevation && { elevation: placeSchema.elevation }),
+    },
+  }),
+  ...(placeSchema.address && {
+    address: {
+      '@type': 'PostalAddress',
+      addressRegion: placeSchema.address.addressRegion,
+      addressCountry: placeSchema.address.addressCountry,
+    },
+  }),
+  ...(placeSchema.founder && { founder: { '@type': 'Person', name: placeSchema.founder } }),
+  ...(placeSchema.foundingDate && { foundingDate: placeSchema.foundingDate }),
+  ...(placeSchema.containedInPlace && {
+    containedInPlace: {
+      '@type': placeSchema.containedInPlace.type,
+      name: placeSchema.containedInPlace.name,
+    },
+  }),
+  additionalType: [
+    'https://schema.org/BuddhistTemple',
+    'https://schema.org/PlaceOfWorship',
+    ...(placeSchema.additionalType || []),
+  ],
+  touristType: placeSchema.touristType || ['Religious tourism', 'Pilgrimage', 'Cultural tourism'],
+  isAccessibleForFree: placeSchema.isAccessibleForFree ?? true,
+  publicAccess: placeSchema.publicAccess ?? true,
+  ...(placeSchema.amenityFeature && {
+    amenityFeature: placeSchema.amenityFeature.map(feature => ({
+      '@type': 'LocationFeatureSpecification',
+      name: feature,
+      value: true,
+    })),
+  }),
+} : null;
+
+// ItemList/CollectionPage Schema
+const collectionSchema = collectionItems && collectionItems.length > 0 ? {
+  '@type': 'CollectionPage',
+  name: collectionName || title,
+  description,
+  url: canonicalURL.href,
+  mainEntity: {
+    '@type': 'ItemList',
+    name: collectionName || title,
+    description,
+    numberOfItems: collectionItems.length,
+    itemListElement: collectionItems.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: item.url.startsWith('http') ? item.url : new URL(item.url, Astro.site).href,
+      ...(item.description && { description: item.description }),
+    })),
+  },
+} : null;
+
+// Article Schema
+const articleSchema = type === 'article' ? {
+  '@type': 'Article',
+  headline: title,
+  description,
+  url: canonicalURL.href,
+  image: ogImageURL,
+  datePublished: publishedDate?.toISOString(),
+  dateModified: modifiedDate?.toISOString() || publishedDate?.toISOString(),
+  author: { '@id': `${siteUrl}#organization` },
+  publisher: { '@id': `${siteUrl}#organization` },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalURL.href },
+  inLanguage: 'en-US',
+  keywords: 'Vajrayana, Buddhism, pilgrimage, Tibet, Nepal, Bhutan, India, sacred sites, Padmasambhava',
+} : null;
+
+// WebPage Schema (default)
+const webPageSchema = {
+  '@type': 'WebPage',
+  '@id': canonicalURL.href,
   name: siteTitle,
   description,
   url: canonicalURL.href,
-  ...(type === 'article' && {
-    headline: title,
-    image: ogImageURL,
-    datePublished: publishedDate?.toISOString(),
-    dateModified: modifiedDate?.toISOString() || publishedDate?.toISOString(),
-    author: {
-      '@type': 'Organization',
-      name: siteName,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: siteName,
-      url: Astro.site?.href,
-    },
-  }),
-  ...(type === 'website' && {
-    potentialAction: {
-      '@type': 'SearchAction',
-      target: `${Astro.site?.href}sites?q={search_term_string}`,
-      'query-input': 'required name=search_term_string',
-    },
-  }),
+  isPartOf: { '@id': `${siteUrl}#website` },
+  about: {
+    '@type': 'Thing',
+    name: 'Vajrayana Buddhist Pilgrimage',
+    description: 'Sacred pilgrimage sites in the Vajrayana Buddhist tradition',
+  },
+  inLanguage: 'en-US',
+  ...(publishedDate && { datePublished: publishedDate.toISOString() }),
+  ...(modifiedDate && { dateModified: modifiedDate.toISOString() }),
+};
+
+// Combine all schemas into @graph
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    organizationSchema,
+    websiteSchema,
+    webPageSchema,
+    ...(breadcrumbSchema ? [breadcrumbSchema] : []),
+    ...(placeJsonLd ? [placeJsonLd] : []),
+    ...(collectionSchema ? [collectionSchema] : []),
+    ...(articleSchema ? [articleSchema] : []),
+  ],
 };
 ---
 

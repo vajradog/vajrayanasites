@@ -32,11 +32,31 @@ const regionOrder = ['tibet', 'nepal', 'india', 'bhutan', 'sikkim'];
 const orderedRegions = regionOrder.filter(r => sitesByRegion[r]?.length > 0);
 
 const totalSites = allSitesRaw.length;
+const base = import.meta.env.BASE_URL;
+
+// Breadcrumbs for schema
+const breadcrumbs = [
+  { name: 'Home', url: base },
+  { name: 'All Sacred Sites', url: `${base}sites` },
+];
+
+// Collection schema items
+const collectionItems = allSitesRaw
+  .sort((a, b) => (b.data.significance || 3) - (a.data.significance || 3))
+  .map(site => ({
+    name: site.data.title,
+    url: `${base}sites/${site.slug}`,
+    description: site.data.description,
+  }));
 ---
 
 <BaseLayout 
   title="All Sacred Sites"
   description="Explore Vajrayana Buddhist pilgrimage sites (né) across Tibet, Nepal, India, and Bhutan"
+  type="collection"
+  breadcrumbs={breadcrumbs}
+  collectionName="Sacred Vajrayana Buddhist Pilgrimage Sites"
+  collectionItems={collectionItems}
 >
   <Hero 
     title="Sacred Sites"

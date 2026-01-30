@@ -28,13 +28,70 @@ const regionColors: Record<string, string> = {
   sikkim: 'text-emerald-400',
 };
 
+// Region to country mapping for schema
+const regionCountryMap: Record<string, string> = {
+  tibet: 'China',
+  nepal: 'Nepal',
+  india: 'India',
+  bhutan: 'Bhutan',
+  sikkim: 'India',
+};
+
 // Get placeholder image URL
 const placeholderUrl = `${base}images/placeholder.svg`;
+
+// Build breadcrumbs for schema
+const breadcrumbs = [
+  { name: 'Home', url: base },
+  { name: 'Sites', url: `${base}sites` },
+  { name: formatRegion(site.data.region), url: `${base}regions/${site.data.region}` },
+  { name: site.data.title, url: `${base}sites/${site.slug}` },
+];
+
+// Build rich Place schema for Google
+const placeSchema = {
+  name: site.data.title,
+  alternateName: site.data.titleTibetan,
+  description: site.data.description,
+  image: site.data.image?.src,
+  geo: site.data.coordinates ? {
+    latitude: site.data.coordinates.lat,
+    longitude: site.data.coordinates.lng,
+  } : undefined,
+  elevation: site.data.elevation,
+  address: {
+    addressRegion: site.data.subregion || formatRegion(site.data.region),
+    addressCountry: regionCountryMap[site.data.region],
+  },
+  founder: site.data.founder,
+  foundingDate: site.data.founded,
+  containedInPlace: {
+    name: formatRegion(site.data.region),
+    type: 'AdministrativeArea',
+  },
+  touristType: ['Religious tourism', 'Pilgrimage', 'Cultural tourism', 'Buddhist pilgrimage'],
+  amenityFeature: [
+    ...(site.data.relics ? ['Sacred relics'] : []),
+    ...(site.data.festivals ? ['Religious festivals'] : []),
+    ...(site.data.accessInfo?.permitRequired ? [] : ['No permit required']),
+  ],
+  additionalType: [
+    'https://schema.org/TouristDestination',
+    ...(site.data.lineage?.includes('Nyingma') ? ['https://schema.org/BuddhistTemple'] : []),
+  ],
+  isAccessibleForFree: !site.data.accessInfo?.permitRequired,
+  publicAccess: true,
+};
 ---
 
 <BaseLayout 
   title={site.data.title}
   description={site.data.description}
+  type="place"
+  publishedDate={site.data.publishedAt}
+  modifiedDate={site.data.updatedAt}
+  breadcrumbs={breadcrumbs}
+  placeSchema={placeSchema}
 >
   <!-- Hero Section -->
   <section class="relative min-h-[70vh] flex items-end overflow-hidden">

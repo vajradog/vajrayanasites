@@ -54,9 +54,20 @@ const regions = [
     color: 'from-sky-500/20 to-sky-700/20'
   },
 ];
+
+// Build collection items for schema from featured sites
+const collectionItems = featuredSites.map(site => ({
+  name: site.data.title,
+  url: `${base}sites/${site.slug}`,
+  description: site.data.description,
+}));
 ---
 
-<BaseLayout title="Vajrayana Pilgrimage Sites">
+<BaseLayout 
+  title="Vajrayana Pilgrimage Sites"
+  collectionName="Featured Vajrayana Buddhist Sacred Sites"
+  collectionItems={collectionItems}
+>
   <!-- Hero Section -->
   <Hero 
     title="Sacred Sites"

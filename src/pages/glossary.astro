@@ -207,11 +207,28 @@ const glossaryTerms = [
 
 // Sort alphabetically
 glossaryTerms.sort((a, b) => a.term.localeCompare(b.term));
+
+// Breadcrumbs for schema
+const breadcrumbs = [
+  { name: 'Home', url: base },
+  { name: 'Glossary', url: `${base}glossary` },
+];
+
+// Collection items for glossary terms (for schema)
+const collectionItems = glossaryTerms.map(term => ({
+  name: term.term,
+  url: `${base}glossary#${term.term.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')}`,
+  description: term.definition,
+}));
 ---
 
 <BaseLayout 
   title="Glossary"
   description="Glossary of Tibetan Buddhist terms related to pilgrimage and sacred sites"
+  type="collection"
+  breadcrumbs={breadcrumbs}
+  collectionName="Tibetan Buddhist Pilgrimage Glossary"
+  collectionItems={collectionItems}
 >
   <Hero 
     title="Glossary"
